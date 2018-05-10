@@ -16,13 +16,13 @@ import sac.millennium.model.Puesto;
 import sac.millennium.model.Usuario;
 import sac.millennium.util.Conexion;
 
-public class UsuarioDAOImpl implements IUsuarioDAO {
+public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 
 	private Connection cx;
-	ResultSet rs = null;
-	PreparedStatement pstm = null;
+	private ResultSet rs = null;
+	private PreparedStatement pstm = null;
 
-	public UsuarioDAOImpl() {
+	public UsuarioSqlserverDAOImpl() {
 		cx = Conexion.conectar();
 	}
 
@@ -53,15 +53,16 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
 				usuario.setAreaFuncional(af);
 				Perfil p = new Perfil();
 				p.setId(rs.getString("id_perfil_usuario"));
-				obj.setPerfil(p);
+				usuario.setPerfil(p);
 				Puesto pu = new Puesto();
 				pu.setId(rs.getString("id_puesto_usuario"));
+				usuario.setPuesto(pu);
 				usuario.setEstado(rs.getString("estado_usuario"));
 			}
 
 			cerrarRecursos();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return usuario;
 	}
