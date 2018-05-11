@@ -26,14 +26,12 @@ and open the template in the editor.
 
             <br/>
 
-            <!--<h:outputLabel for="usuario" value="Usuario:" />-->
             <p:inputText id="usuario" value="#{loginBean.usuario.codigo}"
                          placeholder="Usuario" required="true" label="usuario" 
                          requiredMessage="Escriba el usuario por favor" style="width: 250px; margin-left: 20px;" />
 
-            <!--<h:outputLabel for="password" value="Password:" />-->
             <p:password id="password" value="#{loginBean.usuario.clave}" 
-                        placeholder="Password" required="true" label="password" 
+                        placeholder="Clave" required="true" label="password" 
                         requiredMessage="Escriba el password por favor" style="width: 250px; margin-left: 20px;" />
 
             <p:inputText id="anyo" value="2018" 

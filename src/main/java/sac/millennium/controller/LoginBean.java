@@ -1,5 +1,6 @@
 package sac.millennium.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
 
 import sac.millennium.dao.IMenuDAO;
 import sac.millennium.dao.IPerfilDAO;
@@ -30,42 +35,51 @@ import sac.millennium.service.impl.UsuarioServiceImpl;
 
 @ManagedBean
 @SessionScoped
-public class LoginBean {
+public class LoginBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5844963453614414477L;
 
 	// DAO
 	private IUsuarioDAO daoUsuario = new UsuarioSqlserverDAOImpl();
 	private IPerfilDAO daoPerfil = new PerfilSqlserverDAOImpl();
 	private IMenuDAO daoMenu = new MenuSqlserverDAOImpl();
 
-	// globales
-	private Usuario usuario;
-	private Perfil perfil;
-	private List<Menu> listaMenu;
-
 	// services
 	private IUsuarioService service = new UsuarioServiceImpl(daoUsuario);
 	private IPerfilService servPerfil = new PerfilServiceImpl(daoPerfil);
 	private IMenuService servMenu = new MenuServiceImpl(daoMenu);
+
+	// globals
+	private Usuario usuario;
+	private Perfil perfil;
+	private List<Menu> listaMenu;
+	private MenuModel model;
 
 	@PostConstruct
 	public void init() {
 		usuario = new Usuario();
 		perfil = new Perfil();
 		listaMenu = new ArrayList<>();
+		model = new DefaultMenuModel();
 	}
 
-	public void login(ActionEvent event) {
+	public String login(ActionEvent event) {
 		FacesMessage message = null;
 		boolean loggedIn = false;
-		String ruta = "";
+		String redireccion = null;
 		this.usuario = service.iniciarSesion(this.usuario);
 
 		if (this.usuario != null) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario",
-					this.usuario.getCodigo());
+			perfil = servPerfil.findById(this.usuario.getPerfil().getId());
+			listaMenu = servMenu.findMenuByPerfil(perfil);
+			listaMenu.forEach(x -> System.out.println(x.getFormularioAsociado()));
+			construirMenu();
 			loggedIn = true;
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido(a)", usuario.getNombre());
-			ruta = "/satcontrolproyect/common/principal.xhtml";
+			redireccion = "/satcontrolproyect/common/principal.jsf";
 		} else {
 			loggedIn = false;
 			message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error de acceso", "Credenciales incorrectas");
@@ -73,7 +87,41 @@ public class LoginBean {
 		}
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		PrimeFaces.current().ajax().addCallbackParam("loggedIn", loggedIn);
-		PrimeFaces.current().ajax().addCallbackParam("ruta", ruta);
+		PrimeFaces.current().ajax().addCallbackParam("ruta", redireccion);
+
+		return redireccion;
+	}
+
+	public void construirMenu() {
+		DefaultSubMenu firstSubmenu;
+		DefaultSubMenu secondSubmenu;
+		DefaultMenuItem item;
+		for (Menu m : listaMenu) {
+			if (m.getFormularioAsociado().equals("#") && m.getId().equals(m.getContenedor())) {
+				firstSubmenu = new DefaultSubMenu(m.getNombreOpcion());
+				for (Menu sm : listaMenu) {
+					if (sm.getFormularioAsociado().equals("#") && !sm.getId().equals(m.getId())) {
+						secondSubmenu = new DefaultSubMenu(sm.getNombreOpcion());
+					} else {
+						// Menu submenu = (sm.getContenedor().equals(m.getId())) ? sm : null;
+						// if (submenu != null) {
+						if (!sm.getId().equals(m.getId())) {
+							item = new DefaultMenuItem(sm.getNombreOpcion());
+							item.setUrl(sm.getFormularioAsociado());
+							firstSubmenu.addElement(item);
+						}
+						// }
+					}
+				}
+				model.addElement(firstSubmenu);
+			} else {
+				if (!m.getFormularioAsociado().equals("#") && m.getId().equals(m.getContenedor())) {
+					item = new DefaultMenuItem(m.getNombreOpcion());
+					item.setUrl(m.getFormularioAsociado());
+					model.addElement(item);
+				}
+			}
+		}
 	}
 
 	/*
@@ -88,7 +136,6 @@ public class LoginBean {
 	}
 
 	public Perfil getPerfil() {
-		perfil = servPerfil.findById(this.usuario.getPerfil().getId());
 		return perfil;
 	}
 
@@ -97,12 +144,19 @@ public class LoginBean {
 	}
 
 	public List<Menu> getListaMenu() {
-		listaMenu = servMenu.findMenuByPerfil(perfil);
 		return listaMenu;
 	}
 
 	public void setListaMenu(List<Menu> listaMenu) {
 		this.listaMenu = listaMenu;
+	}
+
+	public MenuModel getModel() {
+		return model;
+	}
+
+	public void setModel(MenuModel model) {
+		this.model = model;
 	}
 
 }

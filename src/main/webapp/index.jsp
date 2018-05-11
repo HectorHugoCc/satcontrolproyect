@@ -1,4 +1,4 @@
 <% 
-    response.sendRedirect("./security/login.xhtml");
+    response.sendRedirect("./security/login.jsf");
     return;
 %>

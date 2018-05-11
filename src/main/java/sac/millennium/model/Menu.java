@@ -3,7 +3,7 @@ package sac.millennium.model;
 public class Menu {
 
 	private String id;
-	private int contenedor;
+	private String contenedor;
 	private int ordenAparicion;
 	private String nombreOpcion;
 	private String formularioAsociado;
@@ -20,11 +20,11 @@ public class Menu {
 		this.id = id;
 	}
 
-	public int getContenedor() {
+	public String getContenedor() {
 		return contenedor;
 	}
 
-	public void setContenedor(int contenedor) {
+	public void setContenedor(String contenedor) {
 		this.contenedor = contenedor;
 	}
 

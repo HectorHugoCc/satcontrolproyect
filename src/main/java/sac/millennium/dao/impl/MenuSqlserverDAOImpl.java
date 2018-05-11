@@ -34,7 +34,7 @@ public class MenuSqlserverDAOImpl implements IMenuDAO {
 			while (rs.next()) {
 				obj = new Menu();
 				obj.setId(rs.getString("id_menu"));
-				obj.setContenedor(rs.getInt("contenedor_menu"));
+				obj.setContenedor(rs.getString("contenedor_menu"));
 				obj.setOrdenAparicion(rs.getInt("orden_aparicion_menu"));
 				obj.setNombreOpcion(rs.getString("nombre_opcion_menu"));
 				obj.setFormularioAsociado(rs.getString("formulario_asociado_menu"));
