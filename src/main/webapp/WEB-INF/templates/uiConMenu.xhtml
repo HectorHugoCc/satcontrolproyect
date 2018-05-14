@@ -5,65 +5,46 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+<f:view contentType="text/html">
+	<h:head>
+		<title><ui:insert name="pageTitle">Page Title</ui:insert></title>
+	</h:head>
 
-<h:head>
-	<title><ui:insert name="pageTitle">Page Title</ui:insert></title>
-</h:head>
-
-<h:body>
-	<ui:insert name="pageHeader">Page Header</ui:insert>
-	<p:layout fullPage="true">
-		<p:layoutUnit id="top" position="north" size="50">
-
-			<h:form id="menu">
-<!-- 				<p:menubar model="#{menuController.model}"> -->
-<!-- 					<f:facet name="options"> -->
-<!-- 						<p:outputLabel -->
-<!-- 							value="#{menuController.user.codigo.nombres}  -->
-<!-- #{menuController.user.codigo.apellidos} " /> -->
-<!-- 					</f:facet> -->
-					<f:facet name="options">
-						<p:commandButton icon="ui-icon-power" title="Cerrar Cesion"
-							oncomplete="logout(xhr, status, args)"
-							actionListener="#{loginBean.logout()}" />
-					</f:facet>
-<!-- 				</p:menubar> -->
-			</h:form>
-
-			<!-- 			<p:commandLink id="logout" actionListener="#{loginBean.logout}" -->
-			<!-- 				style="margin-right:20px;" oncomplete="logout(xhr, status, args)"> -->
-			<!-- 				<h:outputText value="logout" /> -->
-			<!-- 			</p:commandLink> -->
-		</p:layoutUnit>
+	<h:body>
+		<p:layout fullPage="true">
+			<p:layoutUnit id="top" position="north" size="50">
+				<div style="text-align: right">
+					<h:form>
+						<h:outputLabel value="ADminm" />
+						<h:outputLabel value="Admin" />
+						<p:commandButton icon="ui-icon-key" title="Cerrar Cesion"
+							actionListener="#{loginBean.logout()}"
+							oncomplete="logout(xhr, status, args)" />
+					</h:form>
+				</div>
+			</p:layoutUnit>
+			<br />
+			<p:layoutUnit id="left" position="west" size="300" resizable="true"
+				closable="true" collapsible="true" header="Options" minSize="200">
+				<h:form id="frmMenu">
+					<p:menu model="#{loginBean.model}" toggleable="true" />
+				</h:form>
+			</p:layoutUnit>
 
 
-		<p:layoutUnit id="left" position="west" size="300" resizable="true"
-			closable="true" collapsible="true" header="Options" minSize="200">
-			<h:form id="frmMenu">
-				<p:menu model="#{loginBean.model}" toggleable="true" />
-			</h:form>
-		</p:layoutUnit>
+			<p:layoutUnit id="center" position="center">
+				<ui:insert name="body">Page Body</ui:insert>
+			</p:layoutUnit>
 
+		</p:layout>
 
-		<p:layoutUnit id="center" position="center">
-			<ui:insert name="body">Page Body</ui:insert>
-		</p:layoutUnit>
-
-	</p:layout>
-
-	<p:dialog header="Basic Dialog" widgetVar="dlg" modal="true">
-		<h:outputText value="Resistance to PrimeFaces is futile!" />
-	</p:dialog>
-
-
-	<script type="text/javascript">
-	   //<![CDATA[   
-	   function logout(xhr, status, args) {
-   		setTimeout(function() {
-	       window.location = '../security/login.xhtml';
-	     }, 500);
-	   } //]]> 
-   </script>
-</h:body>
-
+		<script type="text/javascript">		     
+		   function logout(xhr, status, args) {
+	   		setTimeout(function() {
+		       window.location = '../security/login.xhtml';
+		     }, 500);
+		   } 
+	   </script>
+	</h:body>
+</f:view>
 </html>

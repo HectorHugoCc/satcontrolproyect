@@ -17,9 +17,10 @@ and open the template in the editor.
 <h:body id="principal">
 
 	<div id="cuadro">
-		<p:growl id="mensajes" showDetail="true" life="2000" />
 
-		<h:form>
+		<h:form id="frmLogin">
+
+			<p:growl id="mensajes" showDetail="true" life="2000" />
 			<p:panel header="Login" style="width:300px">
 				<h:panelGrid columns="2" cellpadding="5">
 					<!-- 				<h:outputLabel for="username" value="Usuario:" /> -->
@@ -33,7 +34,7 @@ and open the template in the editor.
 					<f:facet name="footer">
 						<p:commandButton id="loginButton" icon="ui-icon-key"
 							value="Iniciar Sessión" actionListener="#{loginBean.login}"
-							update=":mensajes"
+							update="frmLogin"
 							oncomplete="handleLoginRequest(xhr, status, args)" />
 					</f:facet>
 				</h:panelGrid>
@@ -43,7 +44,8 @@ and open the template in the editor.
 	<script type="text/javascript">
 	function handleLoginRequest(xhr, status, args) {
         if(args.validationFailed || !args.loggedIn) {
-            PF('dlg').jq.effect("shake", {times:5}, 100);
+            alert('credenciales incorrectas');
+        	jQuery('#frmLogin').effect('shake', {times: 3}, 350);
         }
         else {
         	setTimeout(function() {

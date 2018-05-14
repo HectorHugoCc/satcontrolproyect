@@ -2,22 +2,21 @@ package sac.millennium.util;
 
 import java.util.List;
 
-import sac.millennium.dao.impl.UsuarioSqlserverDAOImpl;
-import sac.millennium.model.Usuario;
-import sac.millennium.service.IUsuarioService;
-import sac.millennium.service.impl.UsuarioServiceImpl;
+import sac.millennium.dao.impl.MenuSqlserverDAOImpl;
+import sac.millennium.model.Menu;
+import sac.millennium.service.IMenuService;
+import sac.millennium.service.impl.MenuServiceImpl;
 
 public class App {
 
 	public static void main(String[] args) {
 
-		IUsuarioService serv = new UsuarioServiceImpl(new UsuarioSqlserverDAOImpl());
-		System.out.println("Lista de usuarios");
-		List<Usuario> lista = serv.findAll();
+		IMenuService serv = new MenuServiceImpl(new MenuSqlserverDAOImpl());
+		System.out.println("Probando Menu");
 
-		for (Usuario u : lista) {
-			System.out.println(u.getId() + " - " + u.getNombre());
-		}
+		List<Menu> lista = serv.findAll();
+		lista.forEach(x -> System.out.println(x.getId() + "-" + x.getContenedor() + "-" + x.getOrdenAparicion() + "-"
+				+ x.getFormularioAsociado() + "-" + x.getEstado()));
 	}
 
 }

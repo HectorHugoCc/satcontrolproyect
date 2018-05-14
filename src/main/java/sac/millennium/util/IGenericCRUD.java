@@ -6,11 +6,11 @@ public interface IGenericCRUD<T, K> {
 
 	List<T> findAll();
 
-	T create(T obj);
+	int create(T obj);
 
-	T update(T obj);
+	int update(T obj);
 
-	void delete(K key);
+	int delete(K key);
 
 	T findById(K key);
 }

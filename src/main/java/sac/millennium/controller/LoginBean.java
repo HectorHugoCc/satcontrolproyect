@@ -80,11 +80,12 @@ public class LoginBean implements Serializable {
 			listaMenu.forEach(x -> System.out.println(x.getFormularioAsociado()));
 			construirMenu();
 			loggedIn = true;
-			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido(a)", usuario.getNombre());
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bienvenido(a)", this.usuario.getNombre());
 			redireccion = "/satcontrolproyect/common/principal.jsf";
 		} else {
+			System.out.println("Error de logeo");
 			loggedIn = false;
-			message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error de acceso", "Credenciales incorrectas");
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de acceso", "Credenciales incorrectas");
 			this.usuario = new Usuario();
 		}
 		FacesContext.getCurrentInstance().addMessage(null, message);

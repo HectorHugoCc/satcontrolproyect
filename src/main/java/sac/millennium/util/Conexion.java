@@ -1,5 +1,6 @@
 package sac.millennium.util;
 
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,12 +16,12 @@ public class Conexion {
 		}
 
 		// para ejecutar en consola
-		// File archivo = new File("db.properties");
-		// InputStream inputStream =
-		// Conexion.class.getClassLoader().getResourceAsStream(archivo.getPath());
+		File archivo = new File("db.properties");
+		InputStream inputStream = Conexion.class.getClassLoader().getResourceAsStream(archivo.getPath());
 
 		// para proyecto web
-		InputStream inputStream = Conexion.class.getClassLoader().getResourceAsStream("/db.properties");
+		// InputStream inputStream =
+		// Conexion.class.getClassLoader().getResourceAsStream("/db.properties");
 		Properties properties = new Properties();
 		try {
 			properties.load(inputStream);

@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/templates/uiConMenu.xhtml">
+	<ui:define name="pageTitle">Menu</ui:define>
+	<ui:define name="body">
+		<h1>Esta es la página Menu</h1>
+		<h:form>
+			<p:dataTable var="menu" value="#{menuBean.listamenu}"
+				widgetVar="menuTable" emptyMessage="No hay datos" rows="10"
+				paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<f:facet name="header">
+					<p:outputPanel>
+						<h:outputText value="Search all fields:" />
+						<p:inputText id="globalFilter" onkeyup="PF('menuTable').filter()"
+							style="width:150px" placeholder="Enter keyword" />
+					</p:outputPanel>
+				</f:facet>
+
+				<p:column headerText="Id">
+					<h:outputText value="#{menu.id}" />
+				</p:column>
+				<p:column headerText="contenedor">
+					<h:outputText value="#{menu.contenedor}" />
+				</p:column>
+				<p:column headerText="Orden">
+					<h:outputText value="#{menu.ordenAparicion}" />
+				</p:column>
+				<p:column headerText="nombre">
+					<h:outputText value="#{menu.nombreOpcion}" />
+				</p:column>
+				<p:column headerText="Enlace">
+					<h:outputText value="#{menu.formularioAsociado}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText value="#{menu.estado}" />
+				</p:column>
+
+				<f:facet name="paginatorTopLeft">
+					<p:commandButton type="button" icon="fa fa-sync" />
+				</f:facet>
+
+				<f:facet name="paginatorBottomRight">
+					<p:commandButton type="button" icon="fa fa-cloud-upload" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

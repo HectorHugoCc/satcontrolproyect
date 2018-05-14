@@ -22,32 +22,27 @@ public class MenuServiceImpl implements IMenuService {
 
 	@Override
 	public List<Menu> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findAll();
 	}
 
 	@Override
-	public Menu create(Menu obj) {
-		// TODO Auto-generated method stub
-		return null;
+	public int create(Menu obj) {
+		return dao.create(obj);
 	}
 
 	@Override
-	public Menu update(Menu obj) {
-		// TODO Auto-generated method stub
-		return null;
+	public int update(Menu obj) {
+		return dao.update(obj);
 	}
 
 	@Override
-	public void delete(String key) {
-		// TODO Auto-generated method stub
-
+	public int delete(String key) {
+		return dao.delete(key);
 	}
 
 	@Override
 	public Menu findById(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.findById(key);
 	}
 
 }

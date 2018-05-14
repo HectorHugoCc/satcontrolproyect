@@ -108,21 +108,21 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 	}
 
 	@Override
-	public Usuario create(Usuario obj) {
+	public int create(Usuario obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public Usuario update(Usuario obj) {
+	public int update(Usuario obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public void delete(String key) {
+	public int delete(String key) {
 		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
 	@Override

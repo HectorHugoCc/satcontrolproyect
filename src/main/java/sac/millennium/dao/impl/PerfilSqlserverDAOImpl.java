@@ -26,21 +26,21 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 	}
 
 	@Override
-	public Perfil create(Perfil obj) {
+	public int create(Perfil obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public Perfil update(Perfil obj) {
+	public int update(Perfil obj) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
-	public void delete(String key) {
+	public int delete(String key) {
 		// TODO Auto-generated method stub
-
+		return 0;
 	}
 
 	@Override
