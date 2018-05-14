@@ -1,220 +1,69 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-
-  <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-    <title>CONTROL DE PROYECTOS</title>
-  </h:head>
-
-  <h:body>
-
-    <div id="top">
-      <ui:insert name="top">
-        <p:growl showDetail="true" id="messages"></p:growl>
-
-        <table width="100%">
-          <tr>
-            <td width="40px">
-              <p:button icon="ui-icon-home" outcome="/views/modulo" />
-            </td>
-            <td>
-              <div id="menuPrincipal">
-                <h:form>
-                  <p:menubar >
-                    <p:submenu label="Inicio" icon="ui-icon-document">
-                      <p:menuitem value="Pagina de inicio" outcome="/views/bienvenido"/>
-                      <p:separator />
-                      <p:menuitem value="Cerrar sesion" />
-                    </p:submenu>
-
-                    <p:submenu label="Cliente" icon="ui-icon-document">
-                      <p:menuitem value="Ver" outcome="/views/cliente/cliente"/>
-                    </p:submenu>
-
-                    <p:submenu label="Producto" icon="ui-icon-document">
-                      <p:menuitem value="Asignar precio" outcome="/views/producto/producto"/>
-                    </p:submenu>
-
-                    <p:submenu label="Operaciones" icon="ui-icon-document">
-                      <p:menuitem value="Nota de despacho" outcome="/views/operaciones/notadespacho"/>
-                      <p:separator />
-                      <p:menuitem value="Factura" outcome="/views/operaciones/factura"/>
-                      <p:separator />
-                      <p:menuitem value="GuiaRemision" outcome="/views/operaciones/guiaremision"/>
-                    </p:submenu>
-
-                    <p:submenu label="Reportes" icon="ui-icon-document">
-                      <p:menuitem value="Stock de Productos" outcome="/views/reportes/stock"/>
-                      <p:separator />
-                      <p:menuitem value="Movimientos" outcome="/views/reportes/movimientos"/>
-                    </p:submenu>
-
-                    <f:facet name="options" >
-                      <h:panelGrid columns="5">
-                        <h:outputLabel value="COMPAÑIA: "/>
-                        <h:outputLabel value="#{loginBean.companya.desCompanyia.toUpperCase()}" style="font-weight: bold;color:#3366CC"/>
-                        <p:column style="width: 30px;" >
-                          <p:spacer width="20" />
-                        </p:column>
-                        <h:outputLabel value="AÑO: "/>
-                        <h:outputLabel value="#{loginBean.anyo}" style="font-weight: bold;color:#3366CC"/>
-                      </h:panelGrid>
-                    </f:facet>
-                  </p:menubar>
-                </h:form>
-              </div>
-            </td>
-          </tr>
-        </table>
-
-        <h:form id="formCabecera">
-          <p:panel>
-            <h:panelGrid columns="15">
-              <p:outputLabel for="localidad" value="Localidad: "/>
-              <p:inputText id="localidad" value="#{loginBean.usuario.agmaeEstablecimiento.nomEstablecimiento}" style="width: 160px;" disabled="true"/>
-              <p:commandButton value="..."  oncomplete="PF('dialogConsultarLocalidad').show();" update=":formConsultarLocalidad"/>
-              <p:column style="width: 30px;" >
-                <p:spacer width="20" />
-              </p:column>
-
-              <p:outputLabel for="centro" value="C. Costo " />
-              <p:inputText id="centro" value="#{loginBean.usuario.agmaeCentrocosto.desCentroc}" style="width: 160px;" disabled="true"/>
-              <p:commandButton value="..."  oncomplete="PF('dialogConsultarCentro').show();" update=":formConsultarCentro"/>
-              <p:column style="width: 30px;" >
-                <p:spacer width="20" />
-              </p:column>
-
-              <p:outputLabel for="area" value="Area: " />
-              <p:inputText id="area" value="#{loginBean.usuario.agmaeArea.desArea}" style="width: 160px;" disabled="true"/>
-              <p:commandButton value="..."  oncomplete="PF('dialogConsultarArea').show();" update=":formConsultarArea"/>
-              <p:column style="width: 30px;" >
-                <p:spacer width="20" />
-              </p:column>
-
-              <p:outputLabel for="almacen" value="Almacen: " />
-              <p:inputText id="almacen" value="#{loginBean.usuario.aimarAlmacen.nomAiAlmacen}" style="width: 160px;" disabled="true"/>
-              <p:commandButton value="..."  oncomplete="PF('dialogConsultarAlmacen').show();" update=":formConsultarAlmacen"/>
-            </h:panelGrid>
-
-          </p:panel>
-        </h:form>
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
-        <!-- INICIO CONSULTAR CABECERA -->
-        <h:form id="formConsultarLocalidad">
-          <p:dialog id="dlgConsultarLocalidad" widgetVar="dialogConsultarLocalidad" resizable="false"  modal="true" width="500"  header="Seleccionar area">
-            <p:dataTable id="tablaLocalidad" value="#{loginBean.listaLocalidad}" var="est"
-                         selectionMode="single" selection="#{loginBean.seleccionEstablecimiento}" rowKey="#{est.codEstablecimiento}" >
-              <p:column headerText="Codigo" filterBy="#{est.codEstablecimiento}" filterMatchMode="contains"   filterStyle="width:45px" width="50"  >
-                <h:outputText value="#{est.codEstablecimiento}" />
-              </p:column>
-              <p:column headerText="Localidad" filterBy="#{est.nomEstablecimiento}" filterMatchMode="contains"   filterStyle="width:95px" width="100"  >
-                <h:outputText value="#{est.nomEstablecimiento}" />
-              </p:column>
-              <p:column headerText="Compañia" filterBy="#{est.rucCompanyia}" filterMatchMode="contains"   filterStyle="width:220px" width="225"  >
-                <h:outputText value="#{est.rucCompanyia}" />
-              </p:column>
-              <f:facet name="footer">
-                <p:commandButton process="tablaLocalidad" update=":formCabecera:localidad" icon="ui-icon-add" value="Seleccionar" oncomplete="PF('dialogConsultarLocalidad').hide();" actionListener="#{loginBean.listoLocalidad()}"/>
-              </f:facet>
-            </p:dataTable>
-          </p:dialog>
-        </h:form>
+<h:head>
+	<title><ui:insert name="pageTitle">Page Title</ui:insert></title>
+</h:head>
 
-        <h:form id="formConsultarArea">
-          <p:dialog id="dlgConsultarArea" widgetVar="dialogConsultarArea" resizable="false"  modal="true" width="500"  header="Seleccionar area">
-            <p:dataTable id="tablaArea" value="#{loginBean.listaArea}" var="a"
-                         selectionMode="single" selection="#{loginBean.seleccionArea}" rowKey="#{a.codArea}" >
-              <p:column headerText="Codigo" filterBy="#{a.codArea}" filterMatchMode="contains"   filterStyle="width:45px" width="50"  >
-                <h:outputText value="#{a.codArea}" />
-              </p:column>
-              <p:column headerText="Area" filterBy="#{a.desArea}" filterMatchMode="contains"   filterStyle="width:95px" width="100"  >
-                <h:outputText value="#{a.desArea}" />
-              </p:column>
-              <p:column headerText="Abreviatura" filterBy="#{a.desAbreArea}" filterMatchMode="contains"   filterStyle="width:220px" width="50"  >
-                <h:outputText value="#{a.desAbreArea}" />
-              </p:column>
-              <f:facet name="footer">
-                <p:commandButton process="tablaArea" update=":formCabecera:area" icon="ui-icon-add" value="Seleccionar" oncomplete="PF('dialogConsultarArea').hide();" action="#{loginBean.listoArea()}"/>
-              </f:facet>
-            </p:dataTable>
-          </p:dialog>
-        </h:form>
+<h:body>
+	<ui:insert name="pageHeader">Page Header</ui:insert>
+	<p:layout fullPage="true">
+		<p:layoutUnit id="top" position="north" size="50">
 
-        <h:form id="formConsultarCentro">
-          <p:dialog id="dlgConsultarCentro" widgetVar="dialogConsultarCentro" 
-                    resizable="false"  
-                    modal="true" width="500"  
-                    header="Seleccionar area">
-            <p:dataTable id="tablaCentro" value="#{loginBean.listaCentro}" 
-                         var="cen" selectionMode="single" 
-                         selection="#{loginBean.seleccionCentro}" 
-                         rowKey="#{cen.codCentroc}" >
-              <p:column headerText="Codigo" filterBy="#{cen.codCentroc}" filterMatchMode="contains"   filterStyle="width:45px" width="50"  >
-                <h:outputText value="#{cen.codCentroc}" />
-              </p:column>
-              <p:column headerText="Centro" filterBy="#{cen.desCentroc}" filterMatchMode="contains"   filterStyle="width:95px" width="100"  >
-                <h:outputText value="#{cen.desCentroc}" />
-              </p:column>
-              <f:facet name="footer">
-                <p:commandButton process="tablaCentro" update=":formCabecera:centro" icon="ui-icon-add" value="Seleccionar" oncomplete="PF('dialogConsultarCentro').hide();" action="#{loginBean.listoCentro()}"/>
-              </f:facet>
-            </p:dataTable>
-          </p:dialog>
-        </h:form>
+			<h:form id="menu">
+<!-- 				<p:menubar model="#{menuController.model}"> -->
+<!-- 					<f:facet name="options"> -->
+<!-- 						<p:outputLabel -->
+<!-- 							value="#{menuController.user.codigo.nombres}  -->
+<!-- #{menuController.user.codigo.apellidos} " /> -->
+<!-- 					</f:facet> -->
+					<f:facet name="options">
+						<p:commandButton icon="ui-icon-power" title="Cerrar Cesion"
+							oncomplete="logout(xhr, status, args)"
+							actionListener="#{loginBean.logout()}" />
+					</f:facet>
+<!-- 				</p:menubar> -->
+			</h:form>
 
-        <h:form id="formConsultarAlmacen">
-          <p:dialog id="dlgConsultarAlmacen" widgetVar="dialogConsultarAlmacen" 
-                    resizable="false"  
-                    modal="true" width="500"  
-                    header="Seleccionar area">
-            <p:dataTable id="tablaAlmacen" value="#{loginBean.listaAlmacen}" 
-                         var="alm" selectionMode="single" 
-                         selection="#{loginBean.seleccionAlmacen}" 
-                         rowKey="#{alm.codAiAlmacen}" >
-              <p:column headerText="Codigo" filterBy="#{alm.codAiAlmacen}" 
-                        filterMatchMode="contains"   filterStyle="width:45px" width="50"  >
-                <h:outputText value="#{alm.codAiAlmacen}" />
-              </p:column>
-              <p:column headerText="Almacen" filterBy="#{alm.nomAiAlmacen}" 
-                        filterMatchMode="contains"   filterStyle="width:95px" width="100"  >
-                <h:outputText value="#{alm.nomAiAlmacen}" />
-              </p:column>
-              <p:column headerText="..." filterBy="#{alm.ultInvAiAlmacen}" 
-                        filterMatchMode="contains"   filterStyle="width:220px" width="225"  >
-                <h:outputText value="#{alm.ultInvAiAlmacen}" />
-              </p:column>
-              <f:facet name="footer">
-                <p:commandButton process="tablaAlmacen" update=":formCabecera:almacen" icon="ui-icon-add" value="Seleccionar" oncomplete="PF('dialogConsultarAlmacen').hide();" action="#{loginBean.listoAlmacen()}"/>
-              </f:facet>
-            </p:dataTable>
-          </p:dialog>
-        </h:form>
-        <!-- FIN CONSULTAR CABECERA -->
-      </ui:insert>
-    </div>
+			<!-- 			<p:commandLink id="logout" actionListener="#{loginBean.logout}" -->
+			<!-- 				style="margin-right:20px;" oncomplete="logout(xhr, status, args)"> -->
+			<!-- 				<h:outputText value="logout" /> -->
+			<!-- 			</p:commandLink> -->
+		</p:layoutUnit>
 
-    <div id="content" class="center_content">
-      <ui:insert name="content">Content</ui:insert>
-    </div>
 
-    <div id="bottom" >
-      <ui:insert name="bottom">
-        <ui:insert name="bottom">
-          <br/>
-          <center>
-            LIMA - PERU
-            <br/>
-            2018
-          </center>
-        </ui:insert>
-      </ui:insert>
-    </div>
-  </h:body>
+		<p:layoutUnit id="left" position="west" size="300" resizable="true"
+			closable="true" collapsible="true" header="Options" minSize="200">
+			<h:form id="frmMenu">
+				<p:menu model="#{loginBean.model}" toggleable="true" />
+			</h:form>
+		</p:layoutUnit>
+
+
+		<p:layoutUnit id="center" position="center">
+			<ui:insert name="body">Page Body</ui:insert>
+		</p:layoutUnit>
+
+	</p:layout>
+
+	<p:dialog header="Basic Dialog" widgetVar="dlg" modal="true">
+		<h:outputText value="Resistance to PrimeFaces is futile!" />
+	</p:dialog>
+
+
+	<script type="text/javascript">
+	   //<![CDATA[   
+	   function logout(xhr, status, args) {
+   		setTimeout(function() {
+	       window.location = '../security/login.xhtml';
+	     }, 500);
+	   } //]]> 
+   </script>
+</h:body>
+
 </html>

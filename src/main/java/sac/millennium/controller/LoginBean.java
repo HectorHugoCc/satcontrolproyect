@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.menu.DefaultMenuItem;
@@ -53,6 +54,7 @@ public class LoginBean implements Serializable {
 	private IMenuService servMenu = new MenuServiceImpl(daoMenu);
 
 	// globals
+	private boolean loggedIn;
 	private Usuario usuario;
 	private Perfil perfil;
 	private List<Menu> listaMenu;
@@ -66,9 +68,9 @@ public class LoginBean implements Serializable {
 		model = new DefaultMenuModel();
 	}
 
-	public String login(ActionEvent event) {
+	public void login(ActionEvent event) {
 		FacesMessage message = null;
-		boolean loggedIn = false;
+		loggedIn = false;
 		String redireccion = null;
 		this.usuario = service.iniciarSesion(this.usuario);
 
@@ -87,38 +89,54 @@ public class LoginBean implements Serializable {
 		}
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		PrimeFaces.current().ajax().addCallbackParam("loggedIn", loggedIn);
-		PrimeFaces.current().ajax().addCallbackParam("ruta", redireccion);
+		PrimeFaces.current().ajax().addCallbackParam("view", redireccion);
 
-		return redireccion;
+	}
+
+	public void logout() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		session.invalidate();
+		loggedIn = false;
 	}
 
 	public void construirMenu() {
 		DefaultSubMenu firstSubmenu;
 		DefaultSubMenu secondSubmenu;
-		DefaultMenuItem item;
+		DefaultMenuItem firstItem;
+		DefaultMenuItem secondItem;
+		DefaultMenuItem thirdItem;
+
 		for (Menu m : listaMenu) {
 			if (m.getFormularioAsociado().equals("#") && m.getId().equals(m.getContenedor())) {
 				firstSubmenu = new DefaultSubMenu(m.getNombreOpcion());
 				for (Menu sm : listaMenu) {
 					if (sm.getFormularioAsociado().equals("#") && !sm.getId().equals(m.getId())) {
 						secondSubmenu = new DefaultSubMenu(sm.getNombreOpcion());
-					} else {
-						// Menu submenu = (sm.getContenedor().equals(m.getId())) ? sm : null;
-						// if (submenu != null) {
-						if (!sm.getId().equals(m.getId())) {
-							item = new DefaultMenuItem(sm.getNombreOpcion());
-							item.setUrl(sm.getFormularioAsociado());
-							firstSubmenu.addElement(item);
-						}
+						// for (Menu ssm : listaMenu) {
+						// if (!ssm.getFormularioAsociado().equals("#") &&
+						// ssm.getContenedor().equals(sm.getId())) {
+						// thirdItem = new DefaultMenuItem(ssm.getNombreOpcion());
+						// thirdItem.setUrl(ssm.getFormularioAsociado());
+						// secondSubmenu.addElement(thirdItem);
 						// }
+						// }
+						firstSubmenu.addElement(secondSubmenu);
+					} else {
+						if (!sm.getFormularioAsociado().equals("#") && sm.getContenedor().equals(m.getId())) {
+							if (!sm.getId().equals(m.getId())) {
+								secondItem = new DefaultMenuItem(sm.getNombreOpcion());
+								secondItem.setUrl(sm.getFormularioAsociado());
+								firstSubmenu.addElement(secondItem);
+							}
+						}
 					}
 				}
 				model.addElement(firstSubmenu);
 			} else {
 				if (!m.getFormularioAsociado().equals("#") && m.getId().equals(m.getContenedor())) {
-					item = new DefaultMenuItem(m.getNombreOpcion());
-					item.setUrl(m.getFormularioAsociado());
-					model.addElement(item);
+					firstItem = new DefaultMenuItem(m.getNombreOpcion());
+					firstItem.setUrl(m.getFormularioAsociado());
+					model.addElement(firstItem);
 				}
 			}
 		}
@@ -127,12 +145,21 @@ public class LoginBean implements Serializable {
 	/*
 	 * getters & setters
 	 */
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
 	}
 
 	public Perfil getPerfil() {

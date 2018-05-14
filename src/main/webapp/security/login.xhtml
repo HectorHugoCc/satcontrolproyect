@@ -6,60 +6,53 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-  <h:head>
-    <title>Acceso al sistema</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <h:outputStylesheet name="/css/login.css" />
-  </h:head>
-  <h:body>
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<title>Acceso al sistema</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<h:outputStylesheet name="login.css" library="css" />
+</h:head>
+<h:body id="principal">
 
-    <div class="login">
-      <h:form id="formLogin">
+	<div id="cuadro">
+		<p:growl id="mensajes" showDetail="true" life="2000" />
 
-        <p:growl id="mensajeGeneral"  showDetail="true" life="3000"  />
+		<h:form>
+			<p:panel header="Login" style="width:300px">
+				<h:panelGrid columns="2" cellpadding="5">
+					<!-- 				<h:outputLabel for="username" value="Usuario:" /> -->
+					<p:inputText value="#{loginBean.usuario.codigo}" id="username"
+						required="true" placeholder="Usuario" />
 
-        <p:panel header="Control de acceso"  widgetVar="dlg" style="text-align: center">
-          <h:panelGrid  columns="1" cellpadding="4">
+					<!-- 				<h:outputLabel for="password" value="Clave:" /> -->
+					<p:password value="#{loginBean.usuario.clave}" id="password"
+						required="true" placeholder="Clave" />
 
-            <br/>
-
-            <p:inputText id="usuario" value="#{loginBean.usuario.codigo}"
-                         placeholder="Usuario" required="true" label="usuario" 
-                         requiredMessage="Escriba el usuario por favor" style="width: 250px; margin-left: 20px;" />
-
-            <p:password id="password" value="#{loginBean.usuario.clave}" 
-                        placeholder="Clave" required="true" label="password" 
-                        requiredMessage="Escriba el password por favor" style="width: 250px; margin-left: 20px;" />
-
-            <p:inputText id="anyo" value="2018" 
-                         placeholder="Año" required="true" label="Año" 
-                         requiredMessage="Escriba el año por favor" style="width: 250px; margin-left: 20px;" />
-
-            <f:facet name="footer">
-              <p:commandButton value="Ingresar al sistema" update="formLogin" actionListener="#{loginBean.login(event)}"
-                               oncomplete="handleLoginRequest(xhr, status, args)"  icon="ui-icon-key"/>
-              <br/>
-              <br/>
-            </f:facet>  
-
-
-          </h:panelGrid>
-        </p:panel>
-      </h:form>
-    </div>
-    <script type="text/javascript">
-      function handleLoginRequest(xhr, status, args) {
-        if (args.validationFailed || !args.loggedIn) {
-          jQuery('#formLogin').effect('shake', {times: 3}, 350);
-        } else {
-          location.href = args.ruta;
+					<f:facet name="footer">
+						<p:commandButton id="loginButton" icon="ui-icon-key"
+							value="Iniciar Sessión" actionListener="#{loginBean.login}"
+							update=":mensajes"
+							oncomplete="handleLoginRequest(xhr, status, args)" />
+					</f:facet>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</div>
+	<script type="text/javascript">
+	function handleLoginRequest(xhr, status, args) {
+        if(args.validationFailed || !args.loggedIn) {
+            PF('dlg').jq.effect("shake", {times:5}, 100);
         }
-      }
-    </script>
+        else {
+        	setTimeout(function() {
+                window.location = args.view;
+            }, 500);
+        }
+    }
+	</script>
 
-  </h:body>
+</h:body>
 
 </html>
