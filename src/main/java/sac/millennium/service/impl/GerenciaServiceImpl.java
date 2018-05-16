@@ -2,36 +2,32 @@ package sac.millennium.service.impl;
 
 import java.util.List;
 
-import sac.millennium.dao.IUsuarioDAO;
-import sac.millennium.model.Usuario;
-import sac.millennium.service.IUsuarioService;
+import sac.millennium.dao.IGerenciaDAO;
+import sac.millennium.model.Gerencia;
+import sac.millennium.service.IGerenciaService;
 
-public class UsuarioServiceImpl implements IUsuarioService {
+public class GerenciaServiceImpl implements IGerenciaService {
 
-	IUsuarioDAO dao;
-
-	public UsuarioServiceImpl(IUsuarioDAO dao) {
+	IGerenciaDAO dao;
+	
+	public GerenciaServiceImpl(IGerenciaDAO dao) {
 		this.dao = dao;
 	}
 
 	@Override
-	public Usuario iniciarSesion(Usuario obj) {
-		return dao.iniciarSesion(obj);
-	}
-
-	@Override
-	public List<Usuario> findAll() {
+	public List<Gerencia> findAll() {
+		// TODO Auto-generated method stub
 		return dao.findAll();
 	}
 
 	@Override
-	public int create(Usuario obj) {
+	public int create(Gerencia obj) {
 		// TODO Auto-generated method stub
 		return dao.create(obj);
 	}
 
 	@Override
-	public int update(Usuario obj) {
+	public int update(Gerencia obj) {
 		// TODO Auto-generated method stub
 		return dao.update(obj);
 	}
@@ -43,7 +39,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public Usuario findById(String key) {
+	public Gerencia findById(String key) {
 		// TODO Auto-generated method stub
 		return dao.findById(key);
 	}

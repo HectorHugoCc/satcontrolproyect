@@ -7,35 +7,35 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import sac.millennium.dao.IPerfilDAO;
-import sac.millennium.model.Perfil;
+import sac.millennium.dao.IPuestoDAO;
+import sac.millennium.model.Puesto;
 import sac.millennium.util.Conexion;
 
-public class PerfilSqlserverDAOImpl implements IPerfilDAO {
+public class PuestoSqlserverDAOImpl implements IPuestoDAO{
 
 	private Connection cx;
 	private ResultSet rs = null;
 	private PreparedStatement pstm = null;
 
-	public PerfilSqlserverDAOImpl() {
+	public PuestoSqlserverDAOImpl() {
 		cx = Conexion.conectar();
 	}
-
+	
 	@Override
-	public List<Perfil> findAll() {
-		List<Perfil> lista = new ArrayList<>();
+	public List<Puesto> findAll() {
+		List<Puesto> lista = new ArrayList<>();
 		try {
-			Perfil obj;
-			String sql = "select * from perfil";
+			Puesto obj;
+			String sql = "select * from puesto";
 			pstm = cx.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			while (rs.next()) {
-				obj = new Perfil();
-				obj.setId(rs.getString("id_perfil"));
-				obj.setDescripcion(rs.getString("descripcion_perfil"));
-				obj.setDescripcionCorta(rs.getString("descripcion_corta_perfil"));
-				obj.setEstado(rs.getString("estado_perfil"));				
-				
+				obj = new Puesto();
+				obj.setId(rs.getString("id_puesto"));
+				obj.setDescripcion(rs.getString("descripcion_puesto"));
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_puesto"));
+				obj.setEstado(rs.getString("estado_puesto"));
+
 				lista.add(obj);
 			}
 			cerrarRecursos();
@@ -46,10 +46,10 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 	}
 
 	@Override
-	public int create(Perfil obj) {
+	public int create(Puesto obj) {
 		int estado = -1;
 		try {
-			String sql = "insert into perfil values(?,?,?,?)";
+			String sql = "insert into puesto values(?,?,?,?)";
 			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getId());
 			pstm.setString(2, obj.getDescripcion());
@@ -64,10 +64,10 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 	}
 
 	@Override
-	public int update(Perfil obj) {
+	public int update(Puesto obj) {
 		int estado = -1;
-		try {			
-			String sql = "update perfil set descripcion_perfil = ?,descripcion_corta_perfil = ?,estado_perfil = ? where id_perfil = ?";
+		try {
+			String sql = "update puesto set descripcion_puesto = ?,descripcion_corta_puesto = ?,estado_puesto = ? where id_puesto = ?";
 			pstm = cx.prepareStatement(sql);			
 			pstm.setString(1, obj.getDescripcion());
 			pstm.setString(2, obj.getDescripcionCorta());
@@ -86,7 +86,7 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 	public int delete(String key) {
 		int estado = -1;
 		try {
-			String sql = "delete from perfil where id_perfil=?";
+			String sql = "delete from puesto where id_puesto=?";
 			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, key);
 			estado = pstm.executeUpdate();
@@ -97,20 +97,20 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 	}
 
 	@Override
-	public Perfil findById(String key) {
-		Perfil obj = null;
+	public Puesto findById(String key) {
+		Puesto obj = null;
 		try {
-			String sql = "select * from perfil where id_perfil=?";
+			String sql = "select * from puesto where id_puesto=?";
 			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, key);
 			rs = pstm.executeQuery();
 
 			if (rs.next()) {
-				obj = new Perfil();
-				obj.setId(rs.getString("id_perfil"));
-				obj.setDescripcion("descripcion_perfil");
-				obj.setDescripcionCorta("descripcion_corta_perfil");
-				obj.setEstado("estado_perfil");
+				obj = new Puesto();
+				obj.setId(rs.getString("id_puesto"));
+				obj.setDescripcion(rs.getString("descripcion_puesto"));
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_puesto"));
+				obj.setEstado(rs.getString("estado_puesto"));
 			}
 			cerrarRecursos();
 		} catch (Exception e) {
@@ -118,7 +118,7 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 		}
 		return obj;
 	}
-
+	
 	private void cerrarRecursos() {
 		try {
 			if (rs != null)
@@ -129,4 +129,6 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 			e.printStackTrace();
 		}
 	}
+
+
 }

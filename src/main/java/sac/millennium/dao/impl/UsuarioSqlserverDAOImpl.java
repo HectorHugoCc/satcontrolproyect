@@ -42,14 +42,18 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 				usuario.setNombre(rs.getString("nombre_usuario"));
 				usuario.setClave(rs.getString("palabra_clave_usuario"));
 				usuario.setCorreo(rs.getString("cuenta_correo_usuario"));
+				
 				AreaFuncional af = new AreaFuncional();
 				Gerencia g = new Gerencia();
 				GerenciaCentral gc = new GerenciaCentral();
 				gc.setId(rs.getString("gerencia_c_pertenece_usuario"));
+				
 				g.setId(rs.getString("gerencia_pertenece_usuario"));
+				
 				g.setGerenciaCentral(gc);
 				af.setId(rs.getString("area_func_pertenece_usuario"));
 				af.setGerencia(g);
+				
 				usuario.setAreaFuncional(af);
 				Perfil p = new Perfil();
 				p.setId(rs.getString("id_perfil_usuario"));
@@ -109,26 +113,109 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 
 	@Override
 	public int create(Usuario obj) {
-		// TODO Auto-generated method stub
-		return 0;
+		int estado = -1;
+		try {
+			String sql = "insert into usuario(id_usuario, codigo_usuario, nombre_usuario, palabra_clave_usuario, cuenta_correo_usuario, gerencia_c_pertenece_usuario, gerencia_pertenece_usuario, area_func_pertenece_usuario, id_perfil_usuario, id_puesto_usuario, estado_usuario) values(?,?,?,?,?,?,?,?,?,?,?)";
+			pstm = cx.prepareStatement(sql);
+			pstm.setString(1, obj.getId());
+			pstm.setString(2, obj.getCodigo());
+			pstm.setString(3, obj.getNombre());
+			pstm.setString(4, obj.getClave());
+			pstm.setString(5, obj.getCorreo());			
+			pstm.setString(6, obj.getAreaFuncional().getGerencia().getGerenciaCentral().getId());
+			pstm.setString(7, obj.getAreaFuncional().getGerencia().getId());			
+			pstm.setString(8, obj.getAreaFuncional().getId());
+			pstm.setString(9, obj.getPerfil().getId());
+			pstm.setString(10, obj.getPuesto().getId());			
+			pstm.setString(11, obj.getEstado());
+			
+			estado = pstm.executeUpdate();
+			cerrarRecursos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return estado;
 	}
 
 	@Override
 	public int update(Usuario obj) {
-		// TODO Auto-generated method stub
-		return 0;
+		int estado = -1;
+		try {
+			String sql = "update usuario set odigo_usuario=?, nombre_usuario=?, palabra_clave_usuario=?, cuenta_correo_usuario=?, gerencia_c_pertenece_usuario=?, gerencia_pertenece_usuario=?, area_func_pertenece_usuario=?, id_perfil_usuario=?, id_puesto_usuario=?, estado_usuario=? where id_usuario = ?\r\n" + 
+					"";
+			pstm = cx.prepareStatement(sql);	
+			pstm.setString(1, obj.getCodigo());
+			pstm.setString(2, obj.getNombre());
+			pstm.setString(3, obj.getClave());
+			pstm.setString(4, obj.getCorreo());
+			
+			pstm.setString(5, obj.getAreaFuncional().getId());
+			pstm.setString(6, obj.getPerfil().getId());
+			pstm.setString(7, obj.getPuesto().getId());
+			
+			pstm.setString(8, obj.getEstado());
+			
+			pstm.setString(9, obj.getId());
+
+			estado = pstm.executeUpdate();
+			cerrarRecursos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return estado;
 	}
 
 	@Override
 	public int delete(String key) {
-		// TODO Auto-generated method stub
-		return 0;
+		int estado = -1;
+		try {
+			String sql = "delete from usuario where id_usuario=?";
+			pstm = cx.prepareStatement(sql);
+			pstm.setString(1, key);
+			estado = pstm.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return estado;
 	}
 
 	@Override
 	public Usuario findById(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario obj = null;
+		try {
+			String sql = "select * from usuario where id_usuario=?";
+			pstm = cx.prepareStatement(sql);
+			pstm.setString(1, key);
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {				
+				obj = new Usuario();
+				obj.setId(rs.getString("id_usuario"));
+				obj.setCodigo(rs.getString("codigo_usuario"));
+				obj.setNombre(rs.getString("nombre_usuario"));
+				obj.setClave(rs.getString("palabra_clave_usuario"));
+				obj.setCorreo(rs.getString("cuenta_correo_usuario"));
+				AreaFuncional af = new AreaFuncional();
+				Gerencia g = new Gerencia();
+				GerenciaCentral gc = new GerenciaCentral();
+				gc.setId(rs.getString("gerencia_c_pertenece_usuario"));
+				g.setId(rs.getString("gerencia_pertenece_usuario"));
+				g.setGerenciaCentral(gc);
+				af.setId(rs.getString("area_func_pertenece_usuario"));
+				af.setGerencia(g);
+				obj.setAreaFuncional(af);
+				Perfil p = new Perfil();
+				p.setId(rs.getString("id_perfil_usuario"));
+				obj.setPerfil(p);
+				Puesto pu = new Puesto();
+				pu.setId(rs.getString("id_puesto_usuario"));
+				obj.setEstado(rs.getString("estado_usuario"));
+			}
+			cerrarRecursos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return obj;
 	}
 
 	private void cerrarRecursos() {
