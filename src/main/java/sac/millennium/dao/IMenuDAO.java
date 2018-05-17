@@ -9,4 +9,6 @@ import sac.millennium.util.IGenericCRUD;
 public interface IMenuDAO extends IGenericCRUD<Menu, String> {
 
 	List<Menu> findMenuByPerfil(Perfil perfil);
+
+	List<Menu> listaContenedores();
 }

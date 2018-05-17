@@ -9,49 +9,189 @@
 	<ui:define name="pageTitle">Menu</ui:define>
 	<ui:define name="body">
 		<h1>Esta es la página Menu</h1>
-		<h:form>
-			<p:dataTable var="menu" value="#{menuBean.listamenu}"
-				widgetVar="menuTable" emptyMessage="No hay datos" rows="10"
-				paginator="true"
-				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="5,10,15">
 
-				<f:facet name="header">
-					<p:outputPanel>
-						<h:outputText value="Search all fields:" />
-						<p:inputText id="globalFilter" onkeyup="PF('menuTable').filter()"
-							style="width:150px" placeholder="Enter keyword" />
-					</p:outputPanel>
-				</f:facet>
-
-				<p:column headerText="Id">
-					<h:outputText value="#{menu.id}" />
-				</p:column>
-				<p:column headerText="contenedor">
-					<h:outputText value="#{menu.contenedor}" />
-				</p:column>
-				<p:column headerText="Orden">
-					<h:outputText value="#{menu.ordenAparicion}" />
-				</p:column>
-				<p:column headerText="nombre">
-					<h:outputText value="#{menu.nombreOpcion}" />
-				</p:column>
-				<p:column headerText="Enlace">
-					<h:outputText value="#{menu.formularioAsociado}" />
-				</p:column>
-				<p:column headerText="Estado">
-					<h:outputText value="#{menu.estado}" />
-				</p:column>
-
-				<f:facet name="paginatorTopLeft">
-					<p:commandButton type="button" icon="fa fa-sync" />
-				</f:facet>
-
-				<f:facet name="paginatorBottomRight">
-					<p:commandButton type="button" icon="fa fa-cloud-upload" />
-				</f:facet>
-			</p:dataTable>
+		<h:form id="form_growl">
+			<p:growl id="mensaje" autoUpdate="false" showDetail="true"
+				showSummary="true" severity="info, fatal" />
 		</h:form>
+
+		<h:form id="edicion">
+			<h:inputHidden value="#{menuBean.menu.id}" />
+			<p:fieldset legend="Menus" toggleable="true">
+				<h:panelGrid columns="6">
+					<f:facet name="header">Crear Menu</f:facet>
+					<p:outputLabel value="Nombre:" for="text_nom" />
+					<p:inputText id="text_nom" value="#{menuBean.menu.nombreOpcion}"
+						style="width: 200px" required="true"
+						requiredMessage="Completar Nombres!" />
+					<p:message for="text_nom" />
+
+					<p:outputLabel value="Tipo:" />
+					<p:selectOneMenu id="text_tip" value="#{menuBean.tipoMenu}">
+						<f:selectItem itemLabel="SubMenu" itemValue="S" />
+						<f:selectItem itemLabel="Item" itemValue="I" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="Asignar a:" />
+					<p:selectOneMenu id="text_tip_us" value="#{menuBean.perfil}">
+						<f:selectItem itemLabel="Administrador" itemValue="A" />
+						<f:selectItem itemLabel="Operario" itemValue="O" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="SubMenu" />
+					<p:selectOneMenu id="edicion_som_submenu"
+						value="#{menuBean.listaContenedores}">
+						<f:selectItem itemLabel="Ninguno" noSelectionOption="true" />
+						<f:selectItems value="#{menuBean.listaContenedores}" var="men"
+							itemLabel="#{men.nombreOpcion}" itemValue="#{men.id}" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="Estado:" />
+					<p:selectOneMenu id="text_estado" value="#{menuBean.menu.estado}">
+						<f:selectItem itemLabel="Habilitado" itemValue="1" />
+						<f:selectItem itemLabel="Desabilitado" itemValue="0" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="URL:" for="text_url" />
+					<p:inputText id="text_url"
+						value="#{menuBean.menu.formularioAsociado}" style="width: 400px"
+						required="false" requiredMessage="Completar URL!" />
+					<p:message for="text_url" />
+
+					<p:commandLink actionListener="#" update="">Guardar</p:commandLink>
+					<p:commandLink onclick="PF('menus_dialog').show()">Ver Menus</p:commandLink>
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+
+		<h:form id="editarMenu">
+
+			<p:fieldset legend="Editar Menu" toggleable="true">
+
+				<h:panelGrid columns="3" id="edit_pgrid_buscar">
+					<f:facet name="header" id="edit_facet_buscar">Buscar</f:facet>
+
+					<p:outputLabel value="Codigo" for="text_codigo_editar" />
+					<p:inputMask id="text_codigo_editar" value="" required="true"
+						requiredMessage="Completar!" maxlength="3" mask="9?9999" />
+					<p:message for="text_codigo_editar" />
+
+					<p:commandButton id="cm_editar_buscar" value="Buscar"
+						actionListener="#"
+						update=":form_growl :edicion  :editarMenu :listaMenus" />
+
+				</h:panelGrid>
+				<h:inputHidden value="menuBean.menuAEditar.codigo" />
+
+				<h:panelGrid columns="6">
+					<f:facet name="header">Editar Menu</f:facet>
+
+					<p:outputLabel value="Nombre:" for="text_nom_editar" />
+					<p:inputText id="text_nom_editar" value="" style="width: 200px"
+						required="false" requiredMessage="Completar Nombres!" />
+					<p:message for="text_nom_editar" id="mess_edit_nom" />
+
+					<p:outputLabel value="Tipo:" />
+					<p:selectOneMenu id="text_tip_editar" value="">
+						<f:selectItem itemLabel="SubMenu" itemValue="S" />
+						<f:selectItem itemLabel="Item" itemValue="I" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="Asignar a:" />
+					<p:selectOneMenu id="text_tip_us_editar" value="">
+						<f:selectItem itemLabel="Administrador" itemValue="A" />
+						<f:selectItem itemLabel="Operario" itemValue="O" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="SubMenu" />
+					<p:selectOneMenu id="editarMenu_som_submenu" value="">
+						<f:selectItem itemLabel="Ninguno" noSelectionOption="true" />
+						<f:selectItems value="" var="men" itemLabel="" itemValue="" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="Estado:" />
+					<p:selectOneMenu id="text_estado_editar" value="">
+						<f:selectItem itemLabel="Habilitado" itemValue="true" />
+						<f:selectItem itemLabel="Desabilitado" itemValue="false" />
+					</p:selectOneMenu>
+					<p:outputLabel />
+
+					<p:outputLabel value="URL:" for="text_url_editar" />
+					<p:inputText id="text_url_editar" value="" style="width: 400px"
+						required="false" requiredMessage="Completar URL!" />
+					<p:message for="text_url_editar" />
+
+					<p:commandLink actionListener="#"
+						update=":edicion :listaMenus :form_growl :editarMenu">Guardar Cambios</p:commandLink>
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+
+
+
+		<p:dialog closeOnEscape="true" widgetVar="menus_dialog"
+			showEffect="clip" hideEffect="drop" footer="Menus" modal="true">
+			<h:form id="listaMenus">
+				<p:dataTable value="" var="menu" rendered="" paginator="true"
+					rows="5"
+					paginatorTemplate="	{FirstPageLink}
+					{LastPageLink}
+					{PreviousPageLink}
+					{NextPageLink}
+					{PageLinks}
+					{CurrentPageReport}
+					{RowsPerPageDropdown} "
+					scrollable="true" rowsPerPageTemplate="1, 3, 5"
+					currentPageReportTemplate="Página: ({currentPage}/{totalPages})">
+
+					<f:facet name="header">Menus</f:facet>
+					<p:column width="8">
+						<h:outputLabel value="" />
+					</p:column>
+					<p:column headerText="Menu" width="50">
+						<h:outputLabel value="" />
+					</p:column>
+					<p:column headerText="URL" width="130">
+						<h:outputLabel value="" />
+					</p:column>
+					<p:column headerText="SubMenu" width="50">
+						<h:outputLabel value="" />
+					</p:column>
+					<p:column headerText="Tipo" width="40">
+						<p:selectOneMenu value="" editable="false" disabled="true">
+							<f:selectItem itemLabel="SubMenu" itemValue="S" />
+							<f:selectItem itemLabel="Item" itemValue="I" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column headerText="Para" width="60">
+						<p:selectOneMenu value="s" editable="false" disabled="true">
+							<f:selectItem itemLabel="Administrador" itemValue="A" />
+							<f:selectItem itemLabel="Operario" itemValue="O" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column headerText="Activo" width="30">
+						<p:selectBooleanButton value="" onLabel="Si" offLabel="No"
+							onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
+					</p:column>
+					<p:column width="50">
+						<f:facet name="header">Acciones</f:facet>
+						<p:commandLink action="#"
+							onclick="if (!confirm('Desea realmente eliminar el menú: #{menu.nombre}')) return false;"
+							update=":listaMenus, :edicion :form_growl">Elim<f:setPropertyActionListener
+								value="#{menu}" target="#" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+
+			</h:form>
+		</p:dialog>
 	</ui:define>
 </ui:composition>
 </html>
