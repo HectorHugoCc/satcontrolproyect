@@ -26,25 +26,21 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public int create(Usuario obj) {
-		// TODO Auto-generated method stub
 		return dao.create(obj);
 	}
 
 	@Override
 	public int update(Usuario obj) {
-		// TODO Auto-generated method stub
 		return dao.update(obj);
 	}
 
 	@Override
 	public int delete(String key) {
-		// TODO Auto-generated method stub
 		return dao.delete(key);
 	}
 
 	@Override
 	public Usuario findById(String key) {
-		// TODO Auto-generated method stub
 		return dao.findById(key);
 	}
 

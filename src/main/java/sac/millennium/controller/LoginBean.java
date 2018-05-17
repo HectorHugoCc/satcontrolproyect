@@ -9,7 +9,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.PrimeFaces;
@@ -68,7 +67,7 @@ public class LoginBean implements Serializable {
 		model = new DefaultMenuModel();
 	}
 
-	public void login(ActionEvent event) {
+	public String login() {
 		FacesMessage message = null;
 		loggedIn = false;
 		String redireccion = null;
@@ -87,11 +86,12 @@ public class LoginBean implements Serializable {
 			loggedIn = false;
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de acceso", "Credenciales incorrectas");
 			this.usuario = new Usuario();
+			redireccion = "/satcontrolproyect/permisos.jsf";
 		}
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		PrimeFaces.current().ajax().addCallbackParam("loggedIn", loggedIn);
-		PrimeFaces.current().ajax().addCallbackParam("view", redireccion);
 
+		return redireccion;
 	}
 
 	public void logout() {
@@ -105,7 +105,7 @@ public class LoginBean implements Serializable {
 		DefaultSubMenu secondSubmenu;
 		DefaultMenuItem firstItem;
 		DefaultMenuItem secondItem;
-		DefaultMenuItem thirdItem;
+		// DefaultMenuItem thirdItem;
 
 		for (Menu m : listaMenu) {
 			if (m.getFormularioAsociado().equals("#") && m.getId().equals(m.getContenedor())) {

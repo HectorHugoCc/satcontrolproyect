@@ -11,6 +11,7 @@ import sac.millennium.util.Conexion;
 
 public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 
+	@SuppressWarnings("unused")
 	private Connection cx;
 	private ResultSet rs = null;
 	private PreparedStatement pstm = null;
@@ -18,46 +19,33 @@ public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 	public AreaFuncionalSqlserverDAOImpl() {
 		cx = Conexion.conectar();
 	}
-	
-	
+
 	@Override
 	public List<AreaFuncional> findAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 
 	@Override
 	public int create(AreaFuncional obj) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-
-
 
 	@Override
 	public int update(AreaFuncional obj) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-
-
 
 	@Override
 	public int delete(String key) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
-
-
 	@Override
 	public AreaFuncional findById(String key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	@SuppressWarnings("unused")
 	private void cerrarRecursos() {
 		try {
 			if (rs != null)

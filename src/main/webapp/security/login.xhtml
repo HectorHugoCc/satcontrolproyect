@@ -21,39 +21,38 @@ and open the template in the editor.
 		<h:form id="frmLogin">
 
 			<p:growl id="mensajes" showDetail="true" life="2000" />
-			<p:panel header="Login" style="width:300px">
-				<h:panelGrid columns="2" cellpadding="5">
-					<!-- 				<h:outputLabel for="username" value="Usuario:" /> -->
-					<p:inputText value="#{loginBean.usuario.codigo}" id="username"
-						required="true" placeholder="Usuario" />
+			<p:panel header="Login" style="width:300px" widgetVar="dlg" >
+				<center>
+					<h:panelGrid columns="2" cellpadding="5">
 
-					<!-- 				<h:outputLabel for="password" value="Clave:" /> -->
-					<p:password value="#{loginBean.usuario.clave}" id="password"
-						required="true" placeholder="Clave" />
+						<p:inputText value="#{loginBean.usuario.codigo}" id="username"
+							required="true" placeholder="Usuario" />
+						<br />
+						<p:password value="#{loginBean.usuario.clave}" id="password"
+							required="true" placeholder="Clave" />
 
-					<f:facet name="footer">
-						<p:commandButton id="loginButton" icon="ui-icon-key"
-							value="Iniciar Sessión" actionListener="#{loginBean.login}"
-							update="frmLogin"
-							oncomplete="handleLoginRequest(xhr, status, args)" />
-					</f:facet>
-				</h:panelGrid>
+						<f:facet name="footer">
+							<p:commandButton id="loginButton" icon="ui-icon-key"
+								value="Iniciar Sessión" action="#{loginBean.login()}"
+								update="mensajes"
+								oncomplete="handleLoginRequest(xhr, status, args)" />
+						</f:facet>
+
+					</h:panelGrid>
+				</center>
 			</p:panel>
 		</h:form>
 	</div>
-	<script type="text/javascript">
-	function handleLoginRequest(xhr, status, args) {
+<script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
         if(args.validationFailed || !args.loggedIn) {
-            alert('credenciales incorrectas');
-        	jQuery('#frmLogin').effect('shake', {times: 3}, 350);
+            PF('dlg').jq.effect("shake", {times:5}, 100);
         }
         else {
-        	setTimeout(function() {
-                window.location = args.view;
-            }, 500);
+            
         }
     }
-	</script>
+</script>
 
 </h:body>
 

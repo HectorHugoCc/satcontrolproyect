@@ -16,25 +16,21 @@ public class PerfilServiceImpl implements IPerfilService {
 
 	@Override
 	public List<Perfil> findAll() {
-		// TODO Auto-generated method stub
 		return dao.findAll();
 	}
 
 	@Override
 	public int create(Perfil obj) {
-		// TODO Auto-generated method stub
 		return dao.create(obj);
 	}
 
 	@Override
 	public int update(Perfil obj) {
-		// TODO Auto-generated method stub
 		return dao.update(obj);
 	}
 
 	@Override
 	public int delete(String key) {
-		// Auto-generated method stub
 		return dao.delete(key);
 	}
 
