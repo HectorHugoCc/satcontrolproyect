@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Conexion {
+
 	protected static Connection cx;
 
 	public static Connection conectar() {

@@ -21,6 +21,11 @@ public class MenuServiceImpl implements IMenuService {
 	}
 
 	@Override
+	public List<Menu> listaContenedores() {
+		return dao.listaContenedores();
+	}
+
+	@Override
 	public List<Menu> findAll() {
 		return dao.findAll();
 	}

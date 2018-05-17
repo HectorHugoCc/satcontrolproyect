@@ -49,6 +49,32 @@ public class MenuSqlserverDAOImpl implements IMenuDAO {
 	}
 
 	@Override
+	public List<Menu> listaContenedores() {
+		List<Menu> lista = new ArrayList<>();
+		Menu obj = null;
+		try {
+			String sql = "select * from menu where formulario_asociado_menu='#'";
+			pstm = cx.prepareStatement(sql);
+			rs = pstm.executeQuery();
+
+			while (rs.next()) {
+				obj = new Menu();
+				obj.setId(rs.getString("id_menu"));
+				obj.setContenedor(rs.getString("contenedor_menu"));
+				obj.setOrdenAparicion(rs.getInt("orden_aparicion_menu"));
+				obj.setNombreOpcion(rs.getString("nombre_opcion_menu"));
+				obj.setFormularioAsociado(rs.getString("formulario_asociado_menu"));
+				obj.setEstado(rs.getString("estado_registro_menu"));
+				lista.add(obj);
+			}
+			cerrarRecursos();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	@Override
 	public List<Menu> findAll() {
 		List<Menu> lista = new ArrayList<>();
 		Menu obj = null;
