@@ -21,6 +21,7 @@ public class AreaFuncionalServiceImpl implements IAreaFuncionalService {
 
 	@Override
 	public int create(AreaFuncional obj) {
+
 		return dao.create(obj);
 	}
 
