@@ -5,24 +5,136 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"> 
 
-<h:head></h:head> 
-<body> 
-		<h:form>
-			<p:dataTable var="perfil" value="#{perfilBean.listaPerfil}">
+<ui:composition template="/WEB-INF/templates/uiConMenu.xhtml">
+
+		<ui:define name="pageTitle">Perfil</ui:define>
+		<ui:define name="pageHeader"></ui:define>
+		<ui:define name="body">
+	
+		
+		<h:form id="listaPerfil">
+		
+		<p:growl id="msgs" showDetail="true" ></p:growl>
+		
+			<h:inputHidden value="#{perfilBean.perfilSeleccionado.id}" />
+		
+			<p:fieldset legend="Perfiles">
+				<h:panelGrid columns="6">
 				
+		
+			<p:dataTable id="perfildt" var="perfil" value="#{perfilBean.listaPerfil}" selectionMode="single" rowKey="#{perfil.id}"  editable="true" style="margin-bottom:20px"
+			paginator="true" rows="5" paginatorTemplate="	{FirstPageLink}
+					{LastPageLink}
+					{PreviousPageLink}
+					{NextPageLink}
+					{PageLinks}
+					{CurrentPageReport}
+					{RowsPerPageDropdown} "
+					scrollable="true" rowsPerPageTemplate="1, 3, 5"
+					currentPageReportTemplate="Página: ({currentPage}/{totalPages})">
+				
+				<f:facet name="header">Lista Perfil</f:facet>
+				
+				<p:ajax event="rowEdit" listener="#{perfilBean.onRowEdit}" update=":listaPerfil:msgs" />
+     			<p:ajax event="rowEditCancel" listener="#{perfilBean.onRowCancel}" update=":listaPerfil:msgs" />
+ 
 				<p:column headerText="Id">
-					<h:outputText value="#{perfil.id}" />
+				<p:cellEditor disabled="true">
+					<f:facet name="output"><h:outputText value="#{perfil.id}"/></f:facet>
+					<f:facet name="input"><p:inputText id="modelInput" value="#{perfil.id}" style="width:100%"></p:inputText></f:facet>
+				</p:cellEditor>
 				</p:column>
+				
 				<p:column headerText="Descripcion">
-					<h:outputText value="#{perfil.descripcion}" />
+				<p:cellEditor>
+					<f:facet name="output"><h:outputText value="#{perfil.descripcion}" /></f:facet>
+					<f:facet name="input"><p:inputText value="#{perfil.descripcion}" style="width:100%" label="Descripcion"></p:inputText></f:facet>
+				</p:cellEditor>
 				</p:column>
+				
 				<p:column headerText="Descripcion Corta">
-					<h:outputText value="#{perfil.descripcionCorta}" />
+				<p:cellEditor>
+					<f:facet name="output"><h:outputText value="#{perfil.descripcionCorta}" /></f:facet>
+					<f:facet name="input"><p:inputText value="#{perfil.descripcionCorta}" style="width:100%" label="Descripcion Corta"></p:inputText> </f:facet>
+				</p:cellEditor>
 				</p:column>
-				<p:column headerText="Estado">
-					<h:outputText value="#{perfil.estado}" />
+				
+				<p:column headerText="Estado" width="60">
+				<p:cellEditor>
+					<f:facet name="output"><h:outputText value="#{perfil.estado}"/></f:facet>
+					<f:facet name="input">
+					<p:selectOneMenu value="#{perfil.estado}" style="width:100%">
+						<f:selectItem  itemLabel="Habilitado" itemValue="1"/>
+						<f:selectItem itemLabel="Deshabilitado" itemValue="0"/>
+						
+					</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
 				</p:column>
+				
+				<p:column style="width:100px">
+				<f:facet name="header">Acciones</f:facet>
+		           <p:rowEditor />
+		           
+		       </p:column>
+			
+				
 			</p:dataTable>
+			
+			
+			
+			
+			</h:panelGrid>
+			</p:fieldset>
+			
 		</h:form>
-</body> 
+		
+		<p:commandButton type="button" value="Crear Perfil" id="crearBtn" onclick="PF('perfil_create').show()"></p:commandButton>
+		
+		
+		<p:dialog closeOnEscape="true" widgetVar="perfil_create"
+		showEffect="blind" hideEffect="bounce" width="800" footer="Crear Perfil">
+		<h:form id="crearPerfil">
+			
+			
+			<h:inputHidden value="#{perfilBean.perfilSeleccionado.id}" />
+			
+			<p:fieldset legend="Crear Perfil">
+			<h:panelGrid columns="3">
+			
+				<f:facet name="header">Crear Perfil</f:facet>
+				
+				<p:outputLabel value="Descripcion" for="text_des"/>
+						<p:inputText id="text_des"
+						value="#{perfilBean.perfilSeleccionado.descripcion}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Descripcion"/>
+				<p:message for="text_des"/>
+				
+				<p:outputLabel value="Descripcion Corta" for="text_desCor"/>
+						<p:inputText id="text_desCor"
+						value="#{perfilBean.perfilSeleccionado.descripcionCorta}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Descripcion Corta"/>
+				<p:message for="text_desCor"/>
+				
+				<p:outputLabel value="Estado"></p:outputLabel>
+				<p:selectOneMenu id="tipoEstado" value="#{perfilBean.perfilSeleccionado.estado}">
+					<f:selectItem itemLabel="Habilitado" itemValue="1"/>
+					<f:selectItem itemLabel="Deshabilitado" itemValue="0"/>
+				</p:selectOneMenu>
+				
+				
+				<p:commandButton value="Guardar"></p:commandButton>
+		
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+		
+		</p:dialog>
+		
+		
+		
+</ui:define>
+</ui:composition> 
 </html>

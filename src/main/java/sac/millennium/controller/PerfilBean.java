@@ -4,8 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 import sac.millennium.dao.IPerfilDAO;
 import sac.millennium.dao.impl.PerfilSqlserverDAOImpl;
@@ -21,6 +26,7 @@ public class PerfilBean implements Serializable {
 
 	private IPerfilDAO daoPerfil = new PerfilSqlserverDAOImpl();
 	private IPerfilService servPerfil = new PerfilServiceImpl(daoPerfil);
+	private Perfil perfilSeleccionado = new Perfil();
 
 	List<Perfil> listaPerfil;
 
@@ -28,6 +34,16 @@ public class PerfilBean implements Serializable {
 	public void init() {
 		listarTodo();
 	}
+
+	public String buscar(String id) {
+		@SuppressWarnings("unused")
+		Perfil personaseleccionada = servPerfil.findById(id);
+		return null;
+	}
+
+	/*
+	 * public void modificar() { servPerfil.update(this.perfilSeleccionado); }
+	 */
 
 	private void listarTodo() {
 		listaPerfil = servPerfil.findAll();
@@ -39,6 +55,35 @@ public class PerfilBean implements Serializable {
 
 	public void setListaPerfil(List<Perfil> listaPerfil) {
 		this.listaPerfil = listaPerfil;
+	}
+
+	public Perfil getPerfilSeleccionado() {
+		return perfilSeleccionado;
+	}
+
+	public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
+		this.perfilSeleccionado = perfilSeleccionado;
+	}
+
+	public void onRowEdit(RowEditEvent event) {
+		FacesMessage msg = new FacesMessage("Perfil Editado", ((Perfil) event.getObject()).getId());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void onRowCancel(RowEditEvent event) {
+		FacesMessage msg = new FacesMessage("Edit Cancelado", ((Perfil) event.getObject()).getId());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	public void onCellEdit(CellEditEvent event) {
+		Object oldValue = event.getOldValue();
+		Object newValue = event.getNewValue();
+
+		if (newValue != null && !newValue.equals(oldValue)) {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed",
+					"Old: " + oldValue + ", New:" + newValue);
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+		}
 	}
 
 }
