@@ -12,7 +12,7 @@ import sac.millennium.model.Gerencia;
 import sac.millennium.model.GerenciaCentral;
 import sac.millennium.util.Conexion;
 
-public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
+public class GerenciaSqlserverDAOImpl implements IGerenciaDAO {
 
 	private Connection cx;
 	private ResultSet rs = null;
@@ -21,7 +21,7 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 	public GerenciaSqlserverDAOImpl() {
 		cx = Conexion.conectar();
 	}
-	
+
 	@Override
 	public List<Gerencia> findAll() {
 		List<Gerencia> lista = new ArrayList<>();
@@ -32,17 +32,17 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 			rs = pstm.executeQuery();
 			while (rs.next()) {
 				obj = new Gerencia();
-				
+
 				GerenciaCentral gc = new GerenciaCentral();
 				gc.setId(rs.getString("id_gerencia_c"));
-				obj.setGerenciaCentral(gc);			
-				
+				obj.setGerenciaCentral(gc);
+
 				obj.setId(rs.getString("id_gerencia"));
 				obj.setCodigoPropio(rs.getString("codigo_gerencia_propio"));
 				obj.setDescripcion(rs.getString("descripcion_gerencia"));
-				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia"));				
-				obj.setEstado(rs.getString("estado_gerencia"));	
-				
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia"));
+				obj.setEstado(rs.getString("estado_gerencia"));
+
 				lista.add(obj);
 			}
 			cerrarRecursos();
@@ -58,7 +58,7 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 		try {
 			String sql = "insert into gerencia values(?,?,?,?,?,?)";
 			pstm = cx.prepareStatement(sql);
-			
+
 			pstm.setString(1, obj.getGerenciaCentral().getId());
 			pstm.setString(2, obj.getId());
 			pstm.setString(3, obj.getCodigoPropio());
@@ -76,9 +76,9 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 	@Override
 	public int update(Gerencia obj) {
 		int estado = -1;
-		try {			
+		try {
 			String sql = "update gerencia set id_gerencia_c=?, codigo_gerencia_propio=?, descripcion_gerencia=?, descripcion_corta_gerencia=?, estado_gerencia=? where id_gerencia = ?";
-			pstm = cx.prepareStatement(sql);			
+			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getGerenciaCentral().getId());
 
 			pstm.setString(2, obj.getCodigoPropio());
@@ -120,17 +120,17 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 
 			if (rs.next()) {
 				obj = new Gerencia();
-				
+
 				GerenciaCentral gc = new GerenciaCentral();
 				gc.setId(rs.getString("id_gerencia_c"));
-				obj.setGerenciaCentral(gc);			
-				
+				obj.setGerenciaCentral(gc);
+
 				obj.setId(rs.getString("id_gerencia"));
 				obj.setCodigoPropio(rs.getString("codigo_gerencia_propio"));
 				obj.setDescripcion(rs.getString("descripcion_gerencia"));
-				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia"));				
-				obj.setEstado(rs.getString("estado_gerencia"));	
-				
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia"));
+				obj.setEstado(rs.getString("estado_gerencia"));
+
 			}
 			cerrarRecursos();
 		} catch (Exception e) {
@@ -138,7 +138,7 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 		}
 		return obj;
 	}
-	
+
 	private void cerrarRecursos() {
 		try {
 			if (rs != null)
@@ -148,6 +148,12 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -13,4 +13,6 @@ public interface IGenericCRUD<T, K> {
 	int delete(K key);
 
 	T findById(K key);
+
+	String generarId();
 }

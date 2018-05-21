@@ -42,10 +42,10 @@ public class UsuarioBean implements Serializable {
 	private GerenciaCentral ge_central = new GerenciaCentral();
 	private AreaFuncional areaFunc = new AreaFuncional();
 
-	List<Usuario> listaUsuario;
-	List<GerenciaCentral> listaGerenciaCentral;
-	List<Gerencia> listaGerencia;
-	List<AreaFuncional> listaAreaFuncional;
+	private List<Usuario> listaUsuario;
+	private List<GerenciaCentral> listaGerenciaCentral;
+	private List<Gerencia> listaGerencia;
+	private List<AreaFuncional> listaAreaFuncional;
 
 	@PostConstruct
 	public void init() {

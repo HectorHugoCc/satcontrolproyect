@@ -11,4 +11,10 @@ public interface IMenuService extends IGenericCRUD<Menu, String> {
 	List<Menu> findMenuByPerfil(Perfil perfil);
 
 	List<Menu> listaContenedores();
+
+	List<Menu> listaContenedoresHermanos();
+
+	List<Menu> listaContenedoresHermanos(Menu menu);
+
+	List<Menu> listaItemsHermanos(Menu menu);
 }

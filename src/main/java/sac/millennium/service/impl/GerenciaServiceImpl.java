@@ -39,4 +39,10 @@ public class GerenciaServiceImpl implements IGerenciaService {
 		return dao.findById(key);
 	}
 
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

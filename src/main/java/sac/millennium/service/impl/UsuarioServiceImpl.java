@@ -44,4 +44,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		return dao.findById(key);
 	}
 
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

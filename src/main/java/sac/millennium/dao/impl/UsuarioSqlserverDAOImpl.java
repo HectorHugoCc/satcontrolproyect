@@ -42,18 +42,18 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 				usuario.setNombre(rs.getString("nombre_usuario"));
 				usuario.setClave(rs.getString("palabra_clave_usuario"));
 				usuario.setCorreo(rs.getString("cuenta_correo_usuario"));
-				
+
 				AreaFuncional af = new AreaFuncional();
 				Gerencia g = new Gerencia();
 				GerenciaCentral gc = new GerenciaCentral();
 				gc.setId(rs.getString("gerencia_c_pertenece_usuario"));
-				
+
 				g.setId(rs.getString("gerencia_pertenece_usuario"));
-				
+
 				g.setGerenciaCentral(gc);
 				af.setId(rs.getString("area_func_pertenece_usuario"));
 				af.setGerencia(g);
-				
+
 				usuario.setAreaFuncional(af);
 				Perfil p = new Perfil();
 				p.setId(rs.getString("id_perfil_usuario"));
@@ -121,14 +121,14 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 			pstm.setString(2, obj.getCodigo());
 			pstm.setString(3, obj.getNombre());
 			pstm.setString(4, obj.getClave());
-			pstm.setString(5, obj.getCorreo());			
+			pstm.setString(5, obj.getCorreo());
 			pstm.setString(6, obj.getAreaFuncional().getGerencia().getGerenciaCentral().getId());
-			pstm.setString(7, obj.getAreaFuncional().getGerencia().getId());			
+			pstm.setString(7, obj.getAreaFuncional().getGerencia().getId());
 			pstm.setString(8, obj.getAreaFuncional().getId());
 			pstm.setString(9, obj.getPerfil().getId());
-			pstm.setString(10, obj.getPuesto().getId());			
+			pstm.setString(10, obj.getPuesto().getId());
 			pstm.setString(11, obj.getEstado());
-			
+
 			estado = pstm.executeUpdate();
 			cerrarRecursos();
 		} catch (Exception e) {
@@ -141,20 +141,20 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 	public int update(Usuario obj) {
 		int estado = -1;
 		try {
-			String sql = "update usuario set odigo_usuario=?, nombre_usuario=?, palabra_clave_usuario=?, cuenta_correo_usuario=?, gerencia_c_pertenece_usuario=?, gerencia_pertenece_usuario=?, area_func_pertenece_usuario=?, id_perfil_usuario=?, id_puesto_usuario=?, estado_usuario=? where id_usuario = ?\r\n" + 
-					"";
-			pstm = cx.prepareStatement(sql);	
+			String sql = "update usuario set odigo_usuario=?, nombre_usuario=?, palabra_clave_usuario=?, cuenta_correo_usuario=?, gerencia_c_pertenece_usuario=?, gerencia_pertenece_usuario=?, area_func_pertenece_usuario=?, id_perfil_usuario=?, id_puesto_usuario=?, estado_usuario=? where id_usuario = ?\r\n"
+					+ "";
+			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getCodigo());
 			pstm.setString(2, obj.getNombre());
 			pstm.setString(3, obj.getClave());
 			pstm.setString(4, obj.getCorreo());
-			
+
 			pstm.setString(5, obj.getAreaFuncional().getId());
 			pstm.setString(6, obj.getPerfil().getId());
 			pstm.setString(7, obj.getPuesto().getId());
-			
+
 			pstm.setString(8, obj.getEstado());
-			
+
 			pstm.setString(9, obj.getId());
 
 			estado = pstm.executeUpdate();
@@ -188,7 +188,7 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 			pstm.setString(1, key);
 			rs = pstm.executeQuery();
 
-			if (rs.next()) {				
+			if (rs.next()) {
 				obj = new Usuario();
 				obj.setId(rs.getString("id_usuario"));
 				obj.setCodigo(rs.getString("codigo_usuario"));
@@ -227,6 +227,12 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

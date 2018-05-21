@@ -11,7 +11,7 @@ import sac.millennium.dao.IGerenciaCentralDAO;
 import sac.millennium.model.GerenciaCentral;
 import sac.millennium.util.Conexion;
 
-public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO{
+public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO {
 
 	private Connection cx;
 	private ResultSet rs = null;
@@ -20,7 +20,7 @@ public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO{
 	public GerenciaCentralSqlserverDAOImpl() {
 		cx = Conexion.conectar();
 	}
-	
+
 	@Override
 	public List<GerenciaCentral> findAll() {
 		List<GerenciaCentral> lista = new ArrayList<>();
@@ -34,9 +34,9 @@ public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO{
 				obj.setId(rs.getString("id_gerencia_c"));
 				obj.setCodigoPropio(rs.getString("codigo_gerencia_c_propio"));
 				obj.setDescripcion(rs.getString("descripcion_gerencia_c"));
-				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia_c"));				
-				obj.setEstado(rs.getString("estado_gerencia_c"));	
-								
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia_c"));
+				obj.setEstado(rs.getString("estado_gerencia_c"));
+
 				lista.add(obj);
 			}
 			cerrarRecursos();
@@ -68,7 +68,7 @@ public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO{
 	@Override
 	public int update(GerenciaCentral obj) {
 		int estado = -1;
-		try {			
+		try {
 			String sql = "update gerencia_central set codigo_gerencia_c_propio=?, descripcion_gerencia_c=?, descripcion_corta_gerencia_c=?, estado_gerencia_c=? where id_gerencia_c = ?";
 			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getCodigoPropio());
@@ -113,8 +113,8 @@ public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO{
 				obj.setId(rs.getString("id_gerencia_c"));
 				obj.setCodigoPropio(rs.getString("codigo_gerencia_c_propio"));
 				obj.setDescripcion(rs.getString("descripcion_gerencia_c"));
-				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia_c"));				
-				obj.setEstado(rs.getString("estado_gerencia_c"));	
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia_c"));
+				obj.setEstado(rs.getString("estado_gerencia_c"));
 			}
 			cerrarRecursos();
 		} catch (Exception e) {
@@ -132,5 +132,11 @@ public class GerenciaCentralSqlserverDAOImpl implements IGerenciaCentralDAO{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

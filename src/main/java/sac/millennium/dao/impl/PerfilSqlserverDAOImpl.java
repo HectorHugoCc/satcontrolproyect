@@ -34,8 +34,8 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 				obj.setId(rs.getString("id_perfil"));
 				obj.setDescripcion(rs.getString("descripcion_perfil"));
 				obj.setDescripcionCorta(rs.getString("descripcion_corta_perfil"));
-				obj.setEstado(rs.getString("estado_perfil"));				
-				
+				obj.setEstado(rs.getString("estado_perfil"));
+
 				lista.add(obj);
 			}
 			cerrarRecursos();
@@ -66,9 +66,9 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 	@Override
 	public int update(Perfil obj) {
 		int estado = -1;
-		try {			
+		try {
 			String sql = "update perfil set descripcion_perfil = ?,descripcion_corta_perfil = ?,estado_perfil = ? where id_perfil = ?";
-			pstm = cx.prepareStatement(sql);			
+			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getDescripcion());
 			pstm.setString(2, obj.getDescripcionCorta());
 			pstm.setString(3, obj.getEstado());
@@ -128,5 +128,11 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

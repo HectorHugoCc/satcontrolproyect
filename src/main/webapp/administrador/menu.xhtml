@@ -17,10 +17,8 @@
 
 		<h:form id="edicion">
 			<h:inputHidden value="#{menuBean.menu.id}" />
-			<p:fieldset legend="Menus" toggleable="true">
+			<p:fieldset legend="Crear Menu" toggleable="true">
 				<h:panelGrid columns="6">
-					<f:facet name="header">Crear Menu</f:facet>
-					
 					<p:outputLabel value="Nombre:" for="text_nom" />
 					<p:inputText id="text_nom" value="#{menuBean.menu.nombreOpcion}"
 						style="width: 200px" required="true"
@@ -28,23 +26,28 @@
 					<p:message for="text_nom" />
 
 					<p:outputLabel value="Tipo:" />
-					<p:selectOneMenu id="text_tip" value="#{menuBean.tipoMenu}">
+					<p:selectOneMenu id="text_tip" value="#{menuBean.tipoMenu}"
+						onchange="">
 						<f:selectItem itemLabel="SubMenu" itemValue="S" />
 						<f:selectItem itemLabel="Item" itemValue="I" />
+						<p:ajax update="text_url" />
 					</p:selectOneMenu>
 					<p:outputLabel />
 
-					<p:outputLabel value="Asignar a:" />
-					<p:selectOneMenu id="text_tip_us" value="#{menuBean.perfil}">
-						<f:selectItem itemLabel="Administrador" itemValue="A" />
-						<f:selectItem itemLabel="Operario" itemValue="O" />
+					<p:outputLabel value="Orden:" />
+					<p:selectOneMenu id="text_tip_us" value="#{menuBean.menu.ordenAparicion}">
+						<f:selectItem itemLabel="Primero" itemValue="0" />
+						<f:selectItem itemLabel="Último" itemValue="1" />
+						<f:selectItems value="#{menuBean.listaContenedores}" var="con"
+							itemLabel="#{con.nombreOpcion}" itemValue="#{con.ordenAparicion}" />
 					</p:selectOneMenu>
 					<p:outputLabel />
 
-					<p:outputLabel value="SubMenu" />
+					<p:outputLabel value="Contenedor" />
 					<p:selectOneMenu id="edicion_som_submenu"
-						value="#{menuBean.listaContenedores}">
-						<f:selectItem itemLabel="Ninguno" noSelectionOption="true" />
+						value="#{menuBean.menu.contenedor}">
+						<f:selectItem itemLabel="Ninguno" noSelectionOption="true"
+							itemValue="0" />
 						<f:selectItems value="#{menuBean.listaContenedores}" var="men"
 							itemLabel="#{men.nombreOpcion}" itemValue="#{men.id}" />
 					</p:selectOneMenu>
@@ -59,12 +62,16 @@
 
 					<p:outputLabel value="URL:" for="text_url" />
 					<p:inputText id="text_url"
-						value="#{menuBean.menu.formularioAsociado}" style="width: 400px"
-						required="false" requiredMessage="Completar URL!" />
+						disabled="#{menuBean.tipoMenu.equalsIgnoreCase('S')?true:false}"
+						value="#{(menuBean.tipoMenu.equalsIgnoreCase('I'))? menuBean.menu.formularioAsociado : null}"
+						style="width: 400px" required="false"
+						requiredMessage="Completar URL!" />
 					<p:message for="text_url" />
 
-					<p:commandLink actionListener="#" update="">Guardar</p:commandLink>
-					<p:commandLink onclick="PF('menus_dialog').show()">Ver Menus</p:commandLink>
+					<p:commandButton value="Ver Menus" type="button"
+						onclick="PF('menus_dialog').show()" />
+					<p:commandButton value="Guardar"
+						actionListener="#{menuBean.guardar()}" />
 				</h:panelGrid>
 			</p:fieldset>
 		</h:form>
@@ -136,61 +143,32 @@
 		</h:form>
 
 
-
-		<p:dialog closeOnEscape="true" widgetVar="menus_dialog"
-			showEffect="clip" hideEffect="drop" footer="Menus" modal="true">
+		<p:dialog closeOnEscape="true" widgetVar="menus_dialog" footer="Menus"
+			position="top" positionType="absolute" resizable="false"
+			responsive="true" showEffect="clip" hideEffect="drop">
 			<h:form id="listaMenus">
-				<p:dataTable value="" var="menu" rendered="" paginator="true"
-					rows="5"
-					paginatorTemplate="	{FirstPageLink}
-					{LastPageLink}
-					{PreviousPageLink}
-					{NextPageLink}
-					{PageLinks}
-					{CurrentPageReport}
-					{RowsPerPageDropdown} "
-					scrollable="true" rowsPerPageTemplate="1, 3, 5"
-					currentPageReportTemplate="Página: ({currentPage}/{totalPages})">
-
+				<p:dataTable value="#{menuBean.listamenu}" var="men">
 					<f:facet name="header">Menus</f:facet>
-					<p:column width="8">
-						<h:outputLabel value="" />
+					<p:column headerText="ID">
+						<h:outputLabel value="#{men.id}" />
 					</p:column>
-					<p:column headerText="Menu" width="50">
-						<h:outputLabel value="" />
+					<p:column headerText="Nombre">
+						<h:outputLabel value="#{men.nombreOpcion}" />
 					</p:column>
-					<p:column headerText="URL" width="130">
-						<h:outputLabel value="" />
+					<p:column headerText="Contenedor">
+						<h:outputLabel
+							value="#{men.nombreOpcion.equals(men.contenedor) ? '' : men.contenedor}" />
 					</p:column>
-					<p:column headerText="SubMenu" width="50">
-						<h:outputLabel value="" />
+					<p:column headerText="Orden">
+						<h:outputLabel value="#{men.ordenAparicion}" />
 					</p:column>
-					<p:column headerText="Tipo" width="40">
-						<p:selectOneMenu value="" editable="false" disabled="true">
-							<f:selectItem itemLabel="SubMenu" itemValue="S" />
-							<f:selectItem itemLabel="Item" itemValue="I" />
-						</p:selectOneMenu>
+					<p:column headerText="Formulario">
+						<h:outputLabel value="#{men.formularioAsociado}" />
 					</p:column>
-					<p:column headerText="Para" width="60">
-						<p:selectOneMenu value="s" editable="false" disabled="true">
-							<f:selectItem itemLabel="Administrador" itemValue="A" />
-							<f:selectItem itemLabel="Operario" itemValue="O" />
-						</p:selectOneMenu>
-					</p:column>
-					<p:column headerText="Activo" width="30">
-						<p:selectBooleanButton value="" onLabel="Si" offLabel="No"
-							onIcon="ui-icon-check" offIcon="ui-icon-close" disabled="true" />
-					</p:column>
-					<p:column width="50">
-						<f:facet name="header">Acciones</f:facet>
-						<p:commandLink action="#"
-							onclick="if (!confirm('Desea realmente eliminar el menú: #{menu.nombre}')) return false;"
-							update=":listaMenus, :edicion :form_growl">Elim<f:setPropertyActionListener
-								value="#{menu}" target="#" />
-						</p:commandLink>
+					<p:column headerText="Estado">
+						<h:outputLabel value="#{men.estado == 1 ? 'ACTIVO' : 'INACTIVO'}" />
 					</p:column>
 				</p:dataTable>
-
 			</h:form>
 		</p:dialog>
 	</ui:define>

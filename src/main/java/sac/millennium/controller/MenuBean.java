@@ -9,37 +9,53 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
 import sac.millennium.dao.IMenuDAO;
+import sac.millennium.dao.IPerfilDAO;
 import sac.millennium.dao.impl.MenuSqlserverDAOImpl;
+import sac.millennium.dao.impl.PerfilSqlserverDAOImpl;
 import sac.millennium.model.Menu;
+import sac.millennium.model.Perfil;
 import sac.millennium.service.IMenuService;
+import sac.millennium.service.IPerfilService;
 import sac.millennium.service.impl.MenuServiceImpl;
+import sac.millennium.service.impl.PerfilServiceImpl;
 
 @ManagedBean
 @ApplicationScoped
 public class MenuBean implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4656629421354393217L;
 
 	// DAO
 	private IMenuDAO daoMenu = new MenuSqlserverDAOImpl();
+	private IPerfilDAO daoPerfil = new PerfilSqlserverDAOImpl();
 
 	// service
 	private IMenuService servMenu = new MenuServiceImpl(daoMenu);
+	private IPerfilService servPerfil = new PerfilServiceImpl(daoPerfil);
 
 	// globales
-	List<Menu> listamenu;
-	List<Menu> listaContenedores;
-	Menu menu;
-	String tipoMenu;
-	String perfil;
+	private List<Menu> listamenu;
+	private List<Menu> listaContenedores;
+	private List<Perfil> listaPefil;
+	private Menu menu;
+	private String tipoMenu;
+	private String perfil;
 
 	@PostConstruct
 	public void init() {
 		listamenu = new ArrayList<>();
 		listaContenedores = new ArrayList<>();
+		listaPefil = new ArrayList<>();
 		listarTodo();
 		listarContendores();
+		listarPerfiles();
 		menu = new Menu();
+	}
+
+	public void guardar() {
+		System.out.println("Guardando-......" + this.menu.getContenedor() + this.menu.getFormularioAsociado()
+				+ this.menu.getOrdenAparicion());
+		servMenu.create(menu);
 	}
 
 	private void listarTodo() {
@@ -48,6 +64,10 @@ public class MenuBean implements Serializable {
 
 	private void listarContendores() {
 		listaContenedores = servMenu.listaContenedores();
+	}
+
+	private void listarPerfiles() {
+		listaPefil = servPerfil.findAll();
 	}
 
 	/*
@@ -91,6 +111,14 @@ public class MenuBean implements Serializable {
 
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
+	}
+
+	public List<Perfil> getListaPefil() {
+		return listaPefil;
+	}
+
+	public void setListaPefil(List<Perfil> listaPefil) {
+		this.listaPefil = listaPefil;
 	}
 
 }

@@ -163,4 +163,10 @@ public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 		}
 	}
 
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -11,7 +11,7 @@ import sac.millennium.dao.IPuestoDAO;
 import sac.millennium.model.Puesto;
 import sac.millennium.util.Conexion;
 
-public class PuestoSqlserverDAOImpl implements IPuestoDAO{
+public class PuestoSqlserverDAOImpl implements IPuestoDAO {
 
 	private Connection cx;
 	private ResultSet rs = null;
@@ -20,7 +20,7 @@ public class PuestoSqlserverDAOImpl implements IPuestoDAO{
 	public PuestoSqlserverDAOImpl() {
 		cx = Conexion.conectar();
 	}
-	
+
 	@Override
 	public List<Puesto> findAll() {
 		List<Puesto> lista = new ArrayList<>();
@@ -68,7 +68,7 @@ public class PuestoSqlserverDAOImpl implements IPuestoDAO{
 		int estado = -1;
 		try {
 			String sql = "update puesto set descripcion_puesto = ?,descripcion_corta_puesto = ?,estado_puesto = ? where id_puesto = ?";
-			pstm = cx.prepareStatement(sql);			
+			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getDescripcion());
 			pstm.setString(2, obj.getDescripcionCorta());
 			pstm.setString(3, obj.getEstado());
@@ -118,7 +118,7 @@ public class PuestoSqlserverDAOImpl implements IPuestoDAO{
 		}
 		return obj;
 	}
-	
+
 	private void cerrarRecursos() {
 		try {
 			if (rs != null)
@@ -130,5 +130,10 @@ public class PuestoSqlserverDAOImpl implements IPuestoDAO{
 		}
 	}
 
+	@Override
+	public String generarId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
