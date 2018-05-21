@@ -21,6 +21,10 @@ public class PerfilServiceImpl implements IPerfilService {
 
 	@Override
 	public int create(Perfil obj) {
+
+		String id = generarId();
+		obj.setId(id);
+
 		return dao.create(obj);
 	}
 
@@ -41,8 +45,8 @@ public class PerfilServiceImpl implements IPerfilService {
 
 	@Override
 	public String generarId() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return dao.generarId();
 	}
 
 }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 import sac.millennium.dao.IPerfilDAO;
@@ -56,10 +57,15 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 			pstm.setString(3, obj.getDescripcionCorta());
 			pstm.setString(4, obj.getEstado());
 			estado = pstm.executeUpdate();
+
 			cerrarRecursos();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("Nuevo Perfil registrado >>> " + obj.getId() + "--" + obj.getDescripcion() + "--"
+				+ obj.getDescripcionCorta());
+
 		return estado;
 	}
 
@@ -132,7 +138,21 @@ public class PerfilSqlserverDAOImpl implements IPerfilDAO {
 
 	@Override
 	public String generarId() {
-		// TODO Auto-generated method stub
-		return null;
+		String id = "";
+		Formatter fmt = new Formatter();
+		try {
+			String sql = "select id_perfil from perfil order by id_perfil desc;";
+			pstm = cx.prepareStatement(sql);
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {
+				id = String.valueOf(fmt.format("%04d", Integer.parseInt(rs.getString("id_perfil")) + 1));
+			}
+			cerrarRecursos();
+			fmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 }

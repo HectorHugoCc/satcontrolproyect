@@ -18,12 +18,12 @@
 		
 			<h:inputHidden value="#{perfilBean.perfilSeleccionado.id}" />
 		
-			<p:fieldset legend="Perfiles">
+			<p:fieldset legend="Perfiles" widgetVar="wlistar">
 				<h:panelGrid columns="6">
 				
 		
 			<p:dataTable id="perfildt" var="perfil" value="#{perfilBean.listaPerfil}" selectionMode="single" rowKey="#{perfil.id}"  editable="true" style="margin-bottom:20px"
-			paginator="true" rows="5" paginatorTemplate="	{FirstPageLink}
+			paginator="true" rows="5" widgetVar="cell_perfil" paginatorTemplate="	{FirstPageLink}
 					{LastPageLink}
 					{PreviousPageLink}
 					{NextPageLink}
@@ -35,7 +35,9 @@
 				
 				<f:facet name="header">Lista Perfil</f:facet>
 				
-				<p:ajax event="rowEdit" listener="#{perfilBean.onRowEdit}" update=":listaPerfil:msgs" />
+				<!-- p:ajax  inmediate="true" -->
+				
+				<p:ajax event="rowEdit" listener="#{perfilBean.onRowEdit}" update=":listaPerfil:msgs"/>
      			<p:ajax event="rowEditCancel" listener="#{perfilBean.onRowCancel}" update=":listaPerfil:msgs" />
  
 				<p:column headerText="Id">
@@ -61,7 +63,8 @@
 				
 				<p:column headerText="Estado" width="60">
 				<p:cellEditor>
-					<f:facet name="output"><h:outputText value="#{perfil.estado}"/></f:facet>
+				<f:facet name="output"><h:outputText value="#{perfil.estado==1?'Habilitado':'Deshabilitado'}"/></f:facet>
+
 					<f:facet name="input">
 					<p:selectOneMenu value="#{perfil.estado}" style="width:100%">
 						<f:selectItem  itemLabel="Habilitado" itemValue="1"/>
@@ -74,28 +77,26 @@
 				
 				<p:column style="width:100px">
 				<f:facet name="header">Acciones</f:facet>
-		           <p:rowEditor />
-		           
+		           <p:rowEditor ></p:rowEditor>
+		          
+	
 		       </p:column>
 			
 				
 			</p:dataTable>
-			
-			
-			
-			
 			</h:panelGrid>
+					
+					<p:commandButton type="button" value="Crearperfill" id="crearBtn" onclick="PF('perfil_create').show()"></p:commandButton>
+			
 			</p:fieldset>
 			
 		</h:form>
 		
-		<p:commandButton type="button" value="Crear Perfil" id="crearBtn" onclick="PF('perfil_create').show()"></p:commandButton>
 		
 		
 		<p:dialog closeOnEscape="true" widgetVar="perfil_create"
 		showEffect="blind" hideEffect="bounce" width="800" footer="Crear Perfil">
 		<h:form id="crearPerfil">
-			
 			
 			<h:inputHidden value="#{perfilBean.perfilSeleccionado.id}" />
 			
@@ -125,8 +126,12 @@
 				</p:selectOneMenu>
 				
 				
-				<p:commandButton value="Guardar"></p:commandButton>
-		
+				<p:commandButton value="Registrar" actionListener="#{perfilBean.registra()}" 
+								oncomplete="if(!args.validationFailed) PF('perfil_create').hide()"	
+								update=":listaPerfil:perfildt" inmediate="true">
+				</p:commandButton>
+
+							
 				</h:panelGrid>
 			</p:fieldset>
 		</h:form>

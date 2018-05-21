@@ -7,7 +7,7 @@
 
 <ui:composition template="/WEB-INF/templates/uiConMenu.xhtml">
 
-		<ui:define name="pageTitle">Perfil</ui:define>
+		<ui:define name="pageTitle">Usuario</ui:define>
 		
 		<ui:define name="pageHeader"></ui:define>
 		<ui:define name="body">
@@ -75,9 +75,9 @@
 				</p:column>
 				
 			
-			<p:column headerText="Area Funcional" width="60">
+		<!--  <p:column headerText="Area Funcional" width="60">
 				<p:cellEditor>
-					<f:facet name="output"><h:outputText value="#{usuario.areaFuncional.id}"/></f:facet>
+					<f:facet name="output"><h:outputText value="#{usuario.areaFuncional.descripcionCorta}"/></f:facet>
 					<f:facet name="input">
 					<p:selectOneMenu value="#{usuarioBean.listaAreaFuncional}" var="fila" style="width:100%">
 						<f:selectItem  itemLabel="#{fila.descripcion}" itemValue="#{fila.id}"/>
@@ -86,10 +86,14 @@
 					</f:facet>
 				</p:cellEditor>
 				</p:column>
+				-->	
+				<p:column headerText="Area Funcional" width="60">
+					<h:outputLabel value="#{usuario.areaFuncional.id}" />
+				</p:column>
 				
 				<p:column headerText="Estado" width="60">
 				<p:cellEditor>
-					<f:facet name="output"><h:outputText value="#{usuario.estado}"/></f:facet>
+					<f:facet name="output"><h:outputText value="#{usuario.estado==1?'Habilitado':'Deshabilitado'}"/></f:facet>
 					<f:facet name="input">
 					<p:selectOneMenu value="#{usuario.estado}" style="width:100%">
 						<f:selectItem  itemLabel="Habilitado" itemValue="1"/>
@@ -114,11 +118,90 @@
 			
 			
 			</h:panelGrid>
+			
+			<p:commandButton type="button" value="CrearUsu" id="crearBtn" onclick="PF('usuario_create').show()"></p:commandButton>
+			
 			</p:fieldset>
 			
 		</h:form>
 		
-		<p:commandButton type="button" value="Crear Perfil" id="crearBtn" onclick="PF('perfil_create').show()"></p:commandButton>
+		
+		<p:dialog closeOnEscape="true" widgetVar="usuario_create"
+		showEffect="blind" hideEffect="bounce" width="800" footer="Crear Usuario">
+		<h:form id="crearUsuario">
+			
+			<h:inputHidden value="#{usuarioBean.usuarioSeleccionado.id}" />
+			
+			<p:fieldset legend="Crear Usuario">
+			<h:panelGrid columns="3">
+			
+			<f:facet name="header">Crear Usuario</f:facet>
+				
+				<p:outputLabel value="Codigo" for="text_cod"/>
+						<p:inputText id="text_cod"
+						value="#{usuarioBean.usuarioSeleccionado.codigo}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Codigo"/>
+				<p:message for="text_cod"/>
+				
+				<p:outputLabel value="Nombre" for="text_nom"/>
+						<p:inputText id="text_nom"
+						value="#{usuarioBean.usuarioSeleccionado.nombre}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Nombre"/>
+				<p:message for="text_nom"/>
+				
+				<p:outputLabel value="Clave" for="text_cla"/>
+						<p:inputText id="text_cla"
+						value="#{usuarioBean.usuarioSeleccionado.clave}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Clave"/>
+				<p:message for="text_cla"/>
+			
+			<p:outputLabel value="Correo" for="text_cor"/>
+						<p:inputText id="text_cor"
+						value="#{usuarioBean.usuarioSeleccionado.correo}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Correo"/>
+				<p:message for="text_cor"/>
+				
+			<p:outputLabel value="Area Funcional"/>
+			<p:selectOneMenu value="#{usuarioBean.usuarioSeleccionado.areaFuncional.id}" 
+							required="true" requiredMessage="Completar gerencia central">
+						
+						<f:selectItem itemLabel="[Seleccione]" itemValue=" "/>
+								<f:selectItems value="#{usuarioBean.listaAreaFuncional}" var="fila"
+									itemLabel="#{fila.descripcionCorta}" 
+									itemValue="#{fila.id}"/>	
+							
+			</p:selectOneMenu>
+					
+				
+		<!-- 	<p:outputLabel value="Gerencia" for="text_ger"/>
+						<p:inputText id="text_ger"
+						value="#{usuarioBean.usuarioSeleccionado.areaFuncional.gerencia.id}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar gerencia"/>
+				<p:message for="text_des"/>	
+				
+			<p:outputLabel value="Area Funcional" for="text_arefun"/>
+						<p:inputText id="text_arefun"
+						value="#{usuarioBean.usuarioSeleccionado.areaFuncional.id}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar Area Funcional"/>
+				<p:message for="text_des"/>
+				
+			<p:outputLabel value="Perfil" for="text_per"/>
+						<p:inputText id="text_per"
+						value="#{usuarioBean.usuarioSeleccionado.perfil.id}"
+						style="width: 200px;" required="true"
+						requiredMessage="Completar gerencia central"/>
+				<p:message for="text_des"/>
+			 -->
+			</h:panelGrid>
+			</p:fieldset>
+			</h:form>
+			</p:dialog>
 		
 		
 		</ui:define>

@@ -1,6 +1,7 @@
 package sac.millennium.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -38,10 +39,10 @@ public class UsuarioBean implements Serializable {
 	private IAreaFuncionalDAO daoAreaFunc = new AreaFuncionalSqlserverDAOImpl();
 	private IAreaFuncionalService servAreaFunc = new AreaFuncionalServiceImpl(daoAreaFunc);
 
-	private Gerencia gerencia = new Gerencia();
-	private GerenciaCentral ge_central = new GerenciaCentral();
-	private AreaFuncional areaFunc = new AreaFuncional();
-
+	private GerenciaCentral gerencia_ce;
+	/*
+	 * private GerenciaCentral ge_central; private AreaFuncional areaFunc;
+	 */
 	private List<Usuario> listaUsuario;
 	private List<GerenciaCentral> listaGerenciaCentral;
 	private List<Gerencia> listaGerencia;
@@ -49,13 +50,26 @@ public class UsuarioBean implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		listaUsuario = new ArrayList<>();
+		listaGerenciaCentral = new ArrayList<>();
+		listaGerencia = new ArrayList<>();
+		listaAreaFuncional = new ArrayList<>();
 		listarTodo();
+		usuarioSeleccionado = new Usuario();
+		gerencia_ce = new GerenciaCentral();
+	}
+
+	public UsuarioBean() {
+		usuarioSeleccionado = new Usuario();
 	}
 
 	private void listarTodo() {
 		listaUsuario = servUsuario.findAll();
-		listaAreaFuncional = servAreaFunc.findAll();
 
+	}
+
+	public void registrar() {
+		servUsuario.create(usuarioSeleccionado);
 	}
 
 	public Usuario getUsuarioSeleccionado() {
@@ -118,5 +132,13 @@ public class UsuarioBean implements Serializable {
 
 	public void setListaAreaFuncional(List<AreaFuncional> listaAreaFuncional) {
 		this.listaAreaFuncional = listaAreaFuncional;
+	}
+
+	public GerenciaCentral getGerencia_ce() {
+		return gerencia_ce;
+	}
+
+	public void setGerencia_ce(GerenciaCentral gerencia_ce) {
+		this.gerencia_ce = gerencia_ce;
 	}
 }

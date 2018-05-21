@@ -26,24 +26,50 @@ public class PerfilBean implements Serializable {
 
 	private IPerfilDAO daoPerfil = new PerfilSqlserverDAOImpl();
 	private IPerfilService servPerfil = new PerfilServiceImpl(daoPerfil);
-	private Perfil perfilSeleccionado = new Perfil();
+
+	private Perfil perfilSeleccionado;
 
 	List<Perfil> listaPerfil;
 
 	@PostConstruct
 	public void init() {
 		listarTodo();
-	}
-
-	public String buscar(String id) {
-		@SuppressWarnings("unused")
-		Perfil personaseleccionada = servPerfil.findById(id);
-		return null;
+		perfilSeleccionado = new Perfil();
 	}
 
 	/*
-	 * public void modificar() { servPerfil.update(this.perfilSeleccionado); }
+	 * public String buscar(String id) {
+	 * 
+	 * @SuppressWarnings("unused") Perfil personaseleccionada =
+	 * servPerfil.findById(id); return null; }
 	 */
+
+	public PerfilBean() {
+		perfilSeleccionado = new Perfil();
+	}
+
+	// public void generarId() {
+	// servPerfil.generarId();
+	// }
+
+	public void registra() {
+
+		System.out.println("Guardando......" + perfilSeleccionado.getId() + "--" + perfilSeleccionado.getDescripcion()
+				+ "--" + perfilSeleccionado.getDescripcionCorta() + "--" + perfilSeleccionado.getEstado());
+
+		servPerfil.create(perfilSeleccionado);
+
+		// return "/main/webapp/administrador/Perfil.xhtml";
+	}
+
+	/*
+	 * public void modificar() { servPerfil.update(perfilSeleccionado);
+	 * 
+	 * }
+	 */
+	public void elimina() {
+		servPerfil.delete(perfilSeleccionado.getId());
+	}
 
 	private void listarTodo() {
 		listaPerfil = servPerfil.findAll();
@@ -66,8 +92,10 @@ public class PerfilBean implements Serializable {
 	}
 
 	public void onRowEdit(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Perfil Editado", ((Perfil) event.getObject()).getId());
+		servPerfil.update((Perfil) event.getObject());
+		FacesMessage msg = new FacesMessage("Perfil editado", ((Perfil) event.getObject()).getId());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
+
 	}
 
 	public void onRowCancel(RowEditEvent event) {

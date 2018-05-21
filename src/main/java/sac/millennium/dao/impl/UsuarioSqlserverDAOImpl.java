@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 import sac.millennium.dao.IUsuarioDAO;
@@ -218,6 +219,26 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 		return obj;
 	}
 
+	@Override
+	public String generarId() {
+		String id = "";
+		Formatter fmt = new Formatter();
+		try {
+			String sql = "select id_usuario from usuario order by id_usuario desc;";
+			pstm = cx.prepareStatement(sql);
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {
+				id = String.valueOf(fmt.format("%05d", Integer.parseInt(rs.getString("id_usuario")) + 1));
+			}
+			cerrarRecursos();
+			fmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+
 	private void cerrarRecursos() {
 		try {
 			if (rs != null)
@@ -228,11 +249,4 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 			e.printStackTrace();
 		}
 	}
-
-	@Override
-	public String generarId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

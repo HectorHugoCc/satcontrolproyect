@@ -26,6 +26,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public int create(Usuario obj) {
+		String id = generarId();
+		obj.setId(id);
 		return dao.create(obj);
 	}
 
@@ -46,8 +48,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public String generarId() {
-		// TODO Auto-generated method stub
-		return null;
+		return dao.generarId();
 	}
 
 }
