@@ -14,16 +14,34 @@ import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 import sac.millennium.dao.IAreaFuncionalDAO;
+import sac.millennium.dao.IGerenciaCentralDAO;
+import sac.millennium.dao.IGerenciaDAO;
+import sac.millennium.dao.IPerfilDAO;
+import sac.millennium.dao.IPuestoDAO;
 import sac.millennium.dao.IUsuarioDAO;
 import sac.millennium.dao.impl.AreaFuncionalSqlserverDAOImpl;
+import sac.millennium.dao.impl.GerenciaCentralSqlserverDAOImpl;
+import sac.millennium.dao.impl.GerenciaSqlserverDAOImpl;
+import sac.millennium.dao.impl.PerfilSqlserverDAOImpl;
+import sac.millennium.dao.impl.PuestoSqlserverDAOImpl;
 import sac.millennium.dao.impl.UsuarioSqlserverDAOImpl;
 import sac.millennium.model.AreaFuncional;
 import sac.millennium.model.Gerencia;
 import sac.millennium.model.GerenciaCentral;
+import sac.millennium.model.Perfil;
+import sac.millennium.model.Puesto;
 import sac.millennium.model.Usuario;
 import sac.millennium.service.IAreaFuncionalService;
+import sac.millennium.service.IGerenciaCentralService;
+import sac.millennium.service.IGerenciaService;
+import sac.millennium.service.IPerfilService;
+import sac.millennium.service.IPuestoService;
 import sac.millennium.service.IUsuarioService;
 import sac.millennium.service.impl.AreaFuncionalServiceImpl;
+import sac.millennium.service.impl.GerenciaCentralServiceImpl;
+import sac.millennium.service.impl.GerenciaServiceImpl;
+import sac.millennium.service.impl.PerfilServiceImpl;
+import sac.millennium.service.impl.PuestoServiceImpl;
 import sac.millennium.service.impl.UsuarioServiceImpl;
 
 @ManagedBean
@@ -34,42 +52,107 @@ public class UsuarioBean implements Serializable {
 
 	private IUsuarioDAO daoUsuario = new UsuarioSqlserverDAOImpl();
 	private IUsuarioService servUsuario = new UsuarioServiceImpl(daoUsuario);
-	private Usuario usuarioSeleccionado = new Usuario();
 
 	private IAreaFuncionalDAO daoAreaFunc = new AreaFuncionalSqlserverDAOImpl();
 	private IAreaFuncionalService servAreaFunc = new AreaFuncionalServiceImpl(daoAreaFunc);
 
-	private GerenciaCentral gerencia_ce;
-	/*
-	 * private GerenciaCentral ge_central; private AreaFuncional areaFunc;
-	 */
+	private IGerenciaCentralDAO daoGerCen = new GerenciaCentralSqlserverDAOImpl();
+	private IGerenciaCentralService servGerCen = new GerenciaCentralServiceImpl(daoGerCen);
+
+	private IGerenciaDAO daoGer = new GerenciaSqlserverDAOImpl();
+	private IGerenciaService servGere = new GerenciaServiceImpl(daoGer);
+
+	private IPerfilDAO daoPerfil = new PerfilSqlserverDAOImpl();
+	private IPerfilService servPerfil = new PerfilServiceImpl(daoPerfil);
+
+	private IPuestoDAO daoPuesto = new PuestoSqlserverDAOImpl();
+	private IPuestoService servPuesto = new PuestoServiceImpl(daoPuesto);
+
+	private Usuario usuarioSeleccionado;
+	// private GerenciaCentral gerencia_ce;
+	// private Gerencia gerencia;
+
+	private String idGerenciaCentral;
+	private String idGerencia;
+	private String idAreaFunc;
+	private String idPerfil;
+	private String idPuesto;
+
 	private List<Usuario> listaUsuario;
 	private List<GerenciaCentral> listaGerenciaCentral;
 	private List<Gerencia> listaGerencia;
 	private List<AreaFuncional> listaAreaFuncional;
+	private List<Perfil> listaPerfiles;
+	private List<Puesto> listaPuestos;
 
 	@PostConstruct
 	public void init() {
+		usuarioSeleccionado = new Usuario();
 		listaUsuario = new ArrayList<>();
 		listaGerenciaCentral = new ArrayList<>();
 		listaGerencia = new ArrayList<>();
 		listaAreaFuncional = new ArrayList<>();
+		listaPerfiles = new ArrayList<>();
+		listaPuestos = new ArrayList<>();
 		listarTodo();
-		usuarioSeleccionado = new Usuario();
-		gerencia_ce = new GerenciaCentral();
+
+		// gerencia_ce = new GerenciaCentral();
+
 	}
 
-	public UsuarioBean() {
+	public UsuarioBean() throws Exception {
 		usuarioSeleccionado = new Usuario();
+		listarTodo();
 	}
 
 	private void listarTodo() {
 		listaUsuario = servUsuario.findAll();
+		listaGerenciaCentral = servGerCen.findAll();
+		listaPerfiles = servPerfil.findAll();
+		listaPuestos = servPuesto.findAll();
 
 	}
 
+	public void listarGerencia() {
+		GerenciaCentral ge = new GerenciaCentral();
+		ge.setId(idGerenciaCentral);
+
+		listaGerencia = servGere.findByGerenciaCentral(ge);
+	}
+
+	public void listarAreaFunc() throws Exception {
+		Gerencia g = new Gerencia();
+		g.setId(idGerencia);
+		listaAreaFuncional = servAreaFunc.findByGerencia(g);
+	}
+
 	public void registrar() {
+		GerenciaCentral gc = new GerenciaCentral();
+		gc.setId(idGerenciaCentral);
+
+		Gerencia ge = new Gerencia();
+		ge.setId(idGerencia);
+		ge.setGerenciaCentral(gc);
+
+		AreaFuncional are = new AreaFuncional();
+		are.setId(idAreaFunc);
+		are.setGerencia(ge);
+
+		usuarioSeleccionado.setAreaFuncional(are);
+
+		Perfil per = new Perfil();
+		per.setId(idPerfil);
+		usuarioSeleccionado.setPerfil(per);
+
+		Puesto pu = new Puesto();
+		pu.setId(idPuesto);
+		usuarioSeleccionado.setPuesto(pu);
+
 		servUsuario.create(usuarioSeleccionado);
+	}
+
+	public void nuevo() {
+		usuarioSeleccionado = new Usuario();
 	}
 
 	public Usuario getUsuarioSeleccionado() {
@@ -134,11 +217,71 @@ public class UsuarioBean implements Serializable {
 		this.listaAreaFuncional = listaAreaFuncional;
 	}
 
-	public GerenciaCentral getGerencia_ce() {
-		return gerencia_ce;
+	/*
+	 * public GerenciaCentral getGerencia_ce() { return gerencia_ce; }
+	 * 
+	 * public void setGerencia_ce(GerenciaCentral gerencia_ce) { this.gerencia_ce =
+	 * gerencia_ce; }
+	 * 
+	 * public Gerencia getGerencia() { return gerencia; }
+	 * 
+	 * public void setGerencia(Gerencia gerencia) { this.gerencia = gerencia; }
+	 */
+
+	public String getIdGerenciaCentral() {
+		return idGerenciaCentral;
 	}
 
-	public void setGerencia_ce(GerenciaCentral gerencia_ce) {
-		this.gerencia_ce = gerencia_ce;
+	public void setIdGerenciaCentral(String idGerenciaCentral) {
+		this.idGerenciaCentral = idGerenciaCentral;
 	}
+
+	public String getIdGerencia() {
+		return idGerencia;
+	}
+
+	public void setIdGerencia(String idGerencia) {
+		this.idGerencia = idGerencia;
+	}
+
+	public String getIdAreaFunc() {
+		return idAreaFunc;
+	}
+
+	public void setIdAreaFunc(String idAreaFunc) {
+		this.idAreaFunc = idAreaFunc;
+	}
+
+	public List<Perfil> getListaPerfiles() {
+		return listaPerfiles;
+	}
+
+	public void setListaPerfiles(List<Perfil> listaPerfiles) {
+		this.listaPerfiles = listaPerfiles;
+	}
+
+	public List<Puesto> getListaPuestos() {
+		return listaPuestos;
+	}
+
+	public void setListaPuestos(List<Puesto> listaPuestos) {
+		this.listaPuestos = listaPuestos;
+	}
+
+	public String getIdPerfil() {
+		return idPerfil;
+	}
+
+	public void setIdPerfil(String idPerfil) {
+		this.idPerfil = idPerfil;
+	}
+
+	public String getIdPuesto() {
+		return idPuesto;
+	}
+
+	public void setIdPuesto(String idPuesto) {
+		this.idPuesto = idPuesto;
+	}
+
 }

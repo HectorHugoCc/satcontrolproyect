@@ -77,7 +77,14 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 		List<Usuario> lista = new ArrayList<>();
 		try {
 			Usuario obj;
-			String sql = "select * from usuario";
+			String sql = "select u.id_usuario,u.codigo_usuario,u.nombre_usuario,u.palabra_clave_usuario,u.cuenta_correo_usuario, \r\n"
+					+ "  gc.descripcion_gerencia_c,ge.descripcion_gerencia,arf.descripcion_area_func  , perf.descripcion_perfil,\r\n"
+					+ "   pu.descripcion_puesto, u.estado_usuario\r\n" + "  from usuario u \r\n"
+					+ "  inner join gerencia_central gc on u.gerencia_c_pertenece_usuario=gc.id_gerencia_c\r\n"
+					+ "  inner join gerencia ge on u.gerencia_pertenece_usuario=ge.id_gerencia\r\n"
+					+ "  inner join area_funcional arf on u.area_func_pertenece_usuario=arf.id_area_funcional\r\n"
+					+ "  inner  join perfil perf on u.id_perfil_usuario=perf.id_perfil \r\n"
+					+ " inner  join puesto pu on u.id_puesto_usuario=pu.id_puesto";
 			pstm = cx.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			while (rs.next()) {
@@ -90,17 +97,18 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 				AreaFuncional af = new AreaFuncional();
 				Gerencia g = new Gerencia();
 				GerenciaCentral gc = new GerenciaCentral();
-				gc.setId(rs.getString("gerencia_c_pertenece_usuario"));
-				g.setId(rs.getString("gerencia_pertenece_usuario"));
+				gc.setDescripcion(rs.getString("descripcion_gerencia_c"));
+				g.setDescripcion(rs.getString("descripcion_gerencia"));
 				g.setGerenciaCentral(gc);
-				af.setId(rs.getString("area_func_pertenece_usuario"));
+				af.setDescripcion(rs.getString("descripcion_area_func"));
 				af.setGerencia(g);
 				obj.setAreaFuncional(af);
 				Perfil p = new Perfil();
-				p.setId(rs.getString("id_perfil_usuario"));
+				p.setDescripcion(rs.getString("descripcion_perfil"));
 				obj.setPerfil(p);
 				Puesto pu = new Puesto();
-				pu.setId(rs.getString("id_puesto_usuario"));
+				pu.setDescripcion(rs.getString("descripcion_puesto"));
+				obj.setPuesto(pu);
 				obj.setEstado(rs.getString("estado_usuario"));
 
 				lista.add(obj);
@@ -109,6 +117,7 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return lista;
 	}
 
@@ -135,6 +144,7 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return estado;
 	}
 
@@ -249,4 +259,29 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 			e.printStackTrace();
 		}
 	}
+
+	/*
+	 * public List<Usuario> findAllG(String cod) { List<Usuario> lista = new
+	 * ArrayList<>(); Usuario obj = null; try { String sql =
+	 * "select * from usuario u\r\n" + " where u.gerencia_pertenece_usuario=?"; pstm
+	 * = cx.prepareStatement(sql); pstm.setString(1, cod); rs = pstm.executeQuery();
+	 * 
+	 * if (rs.next()) { obj = new Usuario(); obj.setId(rs.getString("id_usuario"));
+	 * obj.setCodigo(rs.getString("codigo_usuario"));
+	 * obj.setNombre(rs.getString("nombre_usuario"));
+	 * obj.setClave(rs.getString("palabra_clave_usuario"));
+	 * obj.setCorreo(rs.getString("cuenta_correo_usuario")); AreaFuncional af = new
+	 * AreaFuncional(); Gerencia g = new Gerencia(); GerenciaCentral gc = new
+	 * GerenciaCentral(); gc.setId(rs.getString("gerencia_c_pertenece_usuario"));
+	 * g.setId(rs.getString("gerencia_pertenece_usuario"));
+	 * g.setGerenciaCentral(gc);
+	 * af.setId(rs.getString("area_func_pertenece_usuario")); af.setGerencia(g);
+	 * obj.setAreaFuncional(af); Perfil p = new Perfil();
+	 * p.setId(rs.getString("id_perfil_usuario")); obj.setPerfil(p); Puesto pu = new
+	 * Puesto(); pu.setId(rs.getString("id_puesto_usuario")); obj.setPuesto(pu);
+	 * obj.setEstado(rs.getString("estado_usuario"));
+	 * 
+	 * lista.add(obj); } cerrarRecursos(); } catch (Exception e) {
+	 * e.printStackTrace(); } return lista; }
+	 */
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import sac.millennium.dao.IGerenciaDAO;
 import sac.millennium.model.Gerencia;
+import sac.millennium.model.GerenciaCentral;
 import sac.millennium.service.IGerenciaService;
 
 public class GerenciaServiceImpl implements IGerenciaService {
@@ -43,6 +44,12 @@ public class GerenciaServiceImpl implements IGerenciaService {
 	public String generarId() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Gerencia> findByGerenciaCentral(GerenciaCentral gerenciaCentral) {
+		// TODO Auto-generated method stub
+		return dao.findByGerenciaCentral(gerenciaCentral);
 	}
 
 }

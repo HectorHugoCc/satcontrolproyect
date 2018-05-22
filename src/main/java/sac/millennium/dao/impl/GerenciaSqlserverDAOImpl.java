@@ -156,4 +156,35 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO {
 		return null;
 	}
 
+	@Override
+	public List<Gerencia> findByGerenciaCentral(GerenciaCentral gerenciaCentral) {
+		List<Gerencia> lista = new ArrayList<>();
+		try {
+			Gerencia obj;
+			String sql = " select * from  gerencia where id_gerencia_c=?";
+			pstm = cx.prepareStatement(sql);
+			pstm.setString(1, gerenciaCentral.getId());
+			rs = pstm.executeQuery();
+			while (rs.next()) {
+				obj = new Gerencia();
+
+				GerenciaCentral gc = new GerenciaCentral();
+				gc.setId(rs.getString("id_gerencia_c"));
+				obj.setGerenciaCentral(gc);
+
+				obj.setId(rs.getString("id_gerencia"));
+				obj.setCodigoPropio(rs.getString("codigo_gerencia_propio"));
+				obj.setDescripcion(rs.getString("descripcion_gerencia"));
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_gerencia"));
+				obj.setEstado(rs.getString("estado_gerencia"));
+
+				lista.add(obj);
+			}
+			cerrarRecursos();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
 }

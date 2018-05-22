@@ -3,6 +3,7 @@ package sac.millennium.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,6 +168,41 @@ public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 	public String generarId() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<AreaFuncional> findByGerencia(Gerencia gerencia) {
+		List<AreaFuncional> lista = new ArrayList<>();
+		try {
+			AreaFuncional obj;
+			String sql = " select * from  area_funcional where id_gerencia=?";
+			pstm = cx.prepareStatement(sql);
+			pstm.setString(1, gerencia.getId());
+			rs = pstm.executeQuery();
+			while (rs.next()) {
+				obj = new AreaFuncional();
+
+				GerenciaCentral gc = new GerenciaCentral();
+				gc.setId(rs.getString("id_gerencia_c"));
+
+				Gerencia ge = new Gerencia();
+				ge.setId(rs.getString("id_gerencia"));
+				ge.setGerenciaCentral(gc);
+
+				obj.setGerencia(ge);
+
+				obj.setId(rs.getString("id_area_funcional"));
+				obj.setCodigoPropio(rs.getString("codigo_area_func_centro_costo_propio"));
+				obj.setDescripcion(rs.getString("descripcion_area_func"));
+				obj.setDescripcionCorta(rs.getString("descripcion_corta_area_func"));
+				obj.setEstado(rs.getString("estado_area_func"));
+				lista.add(obj);
+			}
+			cerrarRecursos();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 }

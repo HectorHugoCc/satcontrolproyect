@@ -4,6 +4,7 @@ import java.util.List;
 
 import sac.millennium.dao.IAreaFuncionalDAO;
 import sac.millennium.model.AreaFuncional;
+import sac.millennium.model.Gerencia;
 import sac.millennium.service.IAreaFuncionalService;
 
 public class AreaFuncionalServiceImpl implements IAreaFuncionalService {
@@ -42,8 +43,14 @@ public class AreaFuncionalServiceImpl implements IAreaFuncionalService {
 
 	@Override
 	public String generarId() {
-		// TODO Auto-generated method stub
+
 		return null;
+	}
+
+	@Override
+	public List<AreaFuncional> findByGerencia(Gerencia gerencia) {
+
+		return dao.findByGerencia(gerencia);
 	}
 
 }
