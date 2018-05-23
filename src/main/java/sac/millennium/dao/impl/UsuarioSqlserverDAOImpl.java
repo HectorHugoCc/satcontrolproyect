@@ -152,21 +152,22 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 	public int update(Usuario obj) {
 		int estado = -1;
 		try {
-			String sql = "update usuario set odigo_usuario=?, nombre_usuario=?, palabra_clave_usuario=?, cuenta_correo_usuario=?, gerencia_c_pertenece_usuario=?, gerencia_pertenece_usuario=?, area_func_pertenece_usuario=?, id_perfil_usuario=?, id_puesto_usuario=?, estado_usuario=? where id_usuario = ?\r\n"
+			String sql = "update usuario set codigo_usuario=?, nombre_usuario=?, palabra_clave_usuario=?, cuenta_correo_usuario=?, gerencia_c_pertenece_usuario=?, gerencia_pertenece_usuario=?, area_func_pertenece_usuario=?, id_perfil_usuario=?, id_puesto_usuario=?, estado_usuario=? where id_usuario = ?\r\n"
 					+ "";
 			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, obj.getCodigo());
 			pstm.setString(2, obj.getNombre());
 			pstm.setString(3, obj.getClave());
 			pstm.setString(4, obj.getCorreo());
+			pstm.setString(5, obj.getAreaFuncional().getGerencia().getGerenciaCentral().getId());
+			pstm.setString(6, obj.getAreaFuncional().getGerencia().getId());
+			pstm.setString(7, obj.getAreaFuncional().getId());
+			pstm.setString(8, obj.getPerfil().getId());
+			pstm.setString(9, obj.getPuesto().getId());
 
-			pstm.setString(5, obj.getAreaFuncional().getId());
-			pstm.setString(6, obj.getPerfil().getId());
-			pstm.setString(7, obj.getPuesto().getId());
+			pstm.setString(10, obj.getEstado());
 
-			pstm.setString(8, obj.getEstado());
-
-			pstm.setString(9, obj.getId());
+			pstm.setString(11, obj.getId());
 
 			estado = pstm.executeUpdate();
 			cerrarRecursos();

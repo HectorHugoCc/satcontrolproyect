@@ -114,13 +114,15 @@ public class UsuarioBean implements Serializable {
 	}
 
 	public void listarGerencia() {
+		System.out.println(idGerenciaCentral);
 		GerenciaCentral ge = new GerenciaCentral();
 		ge.setId(idGerenciaCentral);
 
 		listaGerencia = servGere.findByGerenciaCentral(ge);
 	}
 
-	public void listarAreaFunc() throws Exception {
+	public void listarAreaFunc() {
+		System.out.println("--" + idGerencia);
 		Gerencia g = new Gerencia();
 		g.setId(idGerencia);
 		listaAreaFuncional = servAreaFunc.findByGerencia(g);
@@ -171,13 +173,91 @@ public class UsuarioBean implements Serializable {
 		this.listaUsuario = listaUsuario;
 	}
 
+	public void modificar() {
+		GerenciaCentral gc = new GerenciaCentral();
+		gc.setId(idGerenciaCentral);
+
+		Gerencia ge = new Gerencia();
+		ge.setId(idGerencia);
+		ge.setGerenciaCentral(gc);
+
+		AreaFuncional are = new AreaFuncional();
+		are.setId(idAreaFunc);
+		are.setGerencia(ge);
+
+		usuarioSeleccionado.setAreaFuncional(are);
+
+		Perfil per = new Perfil();
+		per.setId(idPerfil);
+		usuarioSeleccionado.setPerfil(per);
+
+		Puesto pu = new Puesto();
+		pu.setId(idPuesto);
+		usuarioSeleccionado.setPuesto(pu);
+
+		servUsuario.update(usuarioSeleccionado);
+
+	}
+
 	public void onRowEdit(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Usuario Edited", ((Usuario) event.getObject()).getId());
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+
+		// modificar();
+
+		System.out.println("----" + usuarioSeleccionado.getCodigo() + usuarioSeleccionado.getAreaFuncional());
+		// Usuario usuarioSeleccionado = new Usuario();
+		/*
+		 * GerenciaCentral gc = new GerenciaCentral(); gc.setId(idGerenciaCentral);
+		 * 
+		 * Gerencia ge = new Gerencia(); ge.setId(idGerencia);
+		 * ge.setGerenciaCentral(gc);
+		 * 
+		 * AreaFuncional are = new AreaFuncional(); are.setId(idAreaFunc);
+		 * are.setGerencia(ge);
+		 * 
+		 * Perfil per = new Perfil(); per.setId(idPerfil);
+		 * usuarioSeleccionado.setPerfil(per);
+		 * 
+		 * Puesto pu = new Puesto(); pu.setId(idPuesto);
+		 * usuarioSeleccionado.setPuesto(pu);
+		 * 
+		 * usuarioSeleccionado.setAreaFuncional(are);
+		 * 
+		 * servUsuario.update(usuarioSeleccionado);
+		 */
+		// servUsuario.update(((RowEditEvent) this.usuarioSeleccionado)
+		// event.getObject());
+
+		this.usuarioSeleccionado = (Usuario) event.getObject();
+
+		servUsuario.update(usuarioSeleccionado);
+		/*
+		 * usuarioSeleccionado.setCodigo(usuarioSeleccionado.getCodigo());
+		 * usuarioSeleccionado.setNombre(usuarioSeleccionado.getNombre());
+		 * usuarioSeleccionado.setClave(usuarioSeleccionado.getClave());
+		 * usuarioSeleccionado.setCorreo(usuarioSeleccionado.getCorreo());
+		 * usuarioSeleccionado.getAreaFuncional().getGerencia().getGerenciaCentral().
+		 * setId(idGerenciaCentral);
+		 * usuarioSeleccionado.getAreaFuncional().getGerencia().setId(idGerencia);
+		 * usuarioSeleccionado.getAreaFuncional().setId(idAreaFunc);
+		 * usuarioSeleccionado.getPerfil().setId(idPerfil);
+		 * usuarioSeleccionado.getPuesto().setId(idPuesto);
+		 * usuarioSeleccionado.setEstado(usuarioSeleccionado.getEstado());
+		 * 
+		 * servUsuario.update(this.usuarioSeleccionado); event.getPhaseId(); //
+		 * dataEdit.setTotalVenta(dataEdit.getPrecioProducto().multiply(dataEdit.
+		 * getKilosVendidos(), // MathContext.UNLIMITED));
+		 * 
+		 * // Usuario cc = (Usuario) event.getObject();
+		 * 
+		 * FacesMessage msg = new FacesMessage( "Usuario " + usuarioSeleccionado.getId()
+		 * + ": " + usuarioSeleccionado.getNombre() + " Editado");
+		 * FacesContext.getCurrentInstance().addMessage(null, msg);
+		 */
+
 	}
 
 	public void onRowCancel(RowEditEvent event) {
-		FacesMessage msg = new FacesMessage("Edit Cancelled", ((Usuario) event.getObject()).getId());
+		FacesMessage msg = new FacesMessage("Edit Cancelado", ((Usuario) event.getObject()).getId());
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
