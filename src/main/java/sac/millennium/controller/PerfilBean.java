@@ -48,10 +48,6 @@ public class PerfilBean implements Serializable {
 		perfilSeleccionado = new Perfil();
 	}
 
-	// public void generarId() {
-	// servPerfil.generarId();
-	// }
-
 	public void registra() {
 
 		System.out.println("Guardando......" + perfilSeleccionado.getId() + "--" + perfilSeleccionado.getDescripcion()
@@ -59,19 +55,14 @@ public class PerfilBean implements Serializable {
 
 		servPerfil.create(perfilSeleccionado);
 
-		// return "/main/webapp/administrador/Perfil.xhtml";
+		// listarTodo();
 	}
 
-	/*
-	 * public void modificar() { servPerfil.update(perfilSeleccionado);
-	 * 
-	 * }
-	 */
 	public void elimina() {
 		servPerfil.delete(perfilSeleccionado.getId());
 	}
 
-	private void listarTodo() {
+	public void listarTodo() {
 		listaPerfil = servPerfil.findAll();
 	}
 

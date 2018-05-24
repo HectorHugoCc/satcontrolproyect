@@ -247,6 +247,7 @@ public class UsuarioSqlserverDAOImpl implements IUsuarioDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return id;
 	}
 

@@ -166,7 +166,7 @@ public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 
 	@Override
 	public String generarId() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
@@ -175,7 +175,7 @@ public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 		List<AreaFuncional> lista = new ArrayList<>();
 		try {
 			AreaFuncional obj;
-			String sql = " select * from  area_funcional where id_gerencia=?";
+			String sql = " select * from area_funcional where id_gerencia=?";
 			pstm = cx.prepareStatement(sql);
 			pstm.setString(1, gerencia.getId());
 			rs = pstm.executeQuery();
@@ -196,6 +196,7 @@ public class AreaFuncionalSqlserverDAOImpl implements IAreaFuncionalDAO {
 				obj.setDescripcion(rs.getString("descripcion_area_func"));
 				obj.setDescripcionCorta(rs.getString("descripcion_corta_area_func"));
 				obj.setEstado(rs.getString("estado_area_func"));
+
 				lista.add(obj);
 			}
 			cerrarRecursos();

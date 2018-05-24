@@ -152,7 +152,7 @@ public class GerenciaSqlserverDAOImpl implements IGerenciaDAO {
 
 	@Override
 	public String generarId() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

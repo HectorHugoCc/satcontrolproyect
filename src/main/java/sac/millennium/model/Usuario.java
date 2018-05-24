@@ -15,6 +15,10 @@ public class Usuario {
 	/*
 	 * getters & setters
 	 */
+	public Usuario() {
+
+	}
+
 	public String getId() {
 		return id;
 	}

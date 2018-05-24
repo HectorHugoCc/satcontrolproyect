@@ -119,7 +119,7 @@
 
 
 		<p:dialog closeOnEscape="true" widgetVar="perfil_create"
-			autoupdate="true" showEffect="clip" hideEffect="bounce" width="800"
+			autoupdate="true" showEffect="clip" hideEffect="drop" width="800"
 			footer="Crear Perfil">
 			<h:form id="crearPerfil">
 
@@ -155,7 +155,8 @@
 						<p:commandButton value="Registrar"
 							actionListener="#{perfilBean.registra()}"
 							oncomplete="if(!args.validationFailed) PF('perfil_create').hide()"
-							update=":listaPerfil:perfildt" inmediate="true">
+							update="#{perfilBean.listarTodo()}"
+							inmediate="true">
 						</p:commandButton>
 
 

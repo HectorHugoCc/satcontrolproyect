@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.component.api.UIData;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
@@ -71,12 +72,14 @@ public class UsuarioBean implements Serializable {
 	private Usuario usuarioSeleccionado;
 	// private GerenciaCentral gerencia_ce;
 	// private Gerencia gerencia;
+	private UIData dtFila;
 
 	private String idGerenciaCentral;
 	private String idGerencia;
 	private String idAreaFunc;
 	private String idPerfil;
 	private String idPuesto;
+	private String idUsuario;
 
 	private List<Usuario> listaUsuario;
 	private List<GerenciaCentral> listaGerenciaCentral;
@@ -105,7 +108,7 @@ public class UsuarioBean implements Serializable {
 		listarTodo();
 	}
 
-	private void listarTodo() {
+	public void listarTodo() {
 		listaUsuario = servUsuario.findAll();
 		listaGerenciaCentral = servGerCen.findAll();
 		listaPerfiles = servPerfil.findAll();
@@ -125,7 +128,21 @@ public class UsuarioBean implements Serializable {
 		System.out.println("--" + idGerencia);
 		Gerencia g = new Gerencia();
 		g.setId(idGerencia);
+
 		listaAreaFuncional = servAreaFunc.findByGerencia(g);
+	}
+
+	public void buscar() {
+
+	
+		// usuarioSeleccionado = new Usuario();
+
+		usuarioSeleccionado = (Usuario) dtFila.getRowData();
+		// listarGerencia();
+		// listarAreaFunc();
+
+		System.out.println("==" + usuarioSeleccionado.getAreaFuncional().getGerencia().getDescripcion());
+
 	}
 
 	public void registrar() {
@@ -184,7 +201,6 @@ public class UsuarioBean implements Serializable {
 		AreaFuncional are = new AreaFuncional();
 		are.setId(idAreaFunc);
 		are.setGerencia(ge);
-
 		usuarioSeleccionado.setAreaFuncional(are);
 
 		Perfil per = new Perfil();
@@ -362,6 +378,22 @@ public class UsuarioBean implements Serializable {
 
 	public void setIdPuesto(String idPuesto) {
 		this.idPuesto = idPuesto;
+	}
+
+	public UIData getDtFila() {
+		return dtFila;
+	}
+
+	public void setDtFila(UIData dtFila) {
+		this.dtFila = dtFila;
+	}
+
+	public String getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 }

@@ -17,16 +17,17 @@
 
 			<p:growl id="msgs" showDetail="true"></p:growl>
 
-			<h:inputHidden value="#{usuarioBean.usuarioSeleccionado.id}" />
-
+			
 			<p:fieldset legend="Usuarios">
 				<h:panelGrid columns="6">
 
 
-					<p:dataTable id="usuariodt" var="usuario"
-						value="#{usuarioBean.listaUsuario}" selectionMode="single" editable="true"
-						rowKey="#{usuario.id}" style="margin-bottom:20px"
-						paginator="true" rows="5"
+					<p:dataTable var="usuario" value="#{usuarioBean.listaUsuario}"
+						selectionMode="single" 
+						binding="#{usuarioBean.dtFila}" 
+						rowKey="#{usuario.id}"
+						id="usuariodt" style="margin-bottom:20px" paginator="true"
+						rows="5"
 						paginatorTemplate="	{FirstPageLink}
 					{LastPageLink}
 					{PreviousPageLink}
@@ -39,12 +40,8 @@
 
 						<f:facet name="header">Lista Usuario</f:facet>
 
-						<p:ajax event="rowEdit" listener="#{usuarioBean.onRowEdit}"
-							update=":listaUsuarios:msgs" />
-						<p:ajax event="rowEditCancel"
-							listener="#{usuarioBean.onRowCancel}" update=":listaUsuarios:msgs" />
 
-						<p:column headerText="Id" width="50">
+						<p:column headerText="Id">
 							<p:cellEditor disabled="true">
 								<f:facet name="output">
 									<h:outputText value="#{usuario.id}" />
@@ -56,7 +53,7 @@
 							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Codigo" width="30">
+						<p:column headerText="Codigo">
 							<p:cellEditor>
 								<f:facet name="output">
 									<h:outputText value="#{usuario.codigo}" />
@@ -68,7 +65,7 @@
 							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Nombre" width="70">
+						<p:column headerText="Nombre">
 							<p:cellEditor>
 								<f:facet name="output">
 									<h:outputText value="#{usuario.nombre}" />
@@ -81,7 +78,7 @@
 						</p:column>
 
 
-						<p:column headerText="Correo" width="70">
+						<p:column headerText="Correo">
 							<p:cellEditor>
 								<f:facet name="output">
 									<h:outputText value="#{usuario.correo}" />
@@ -93,112 +90,101 @@
 							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Gerencia Central" width="60">
-						<p:cellEditor>
-							<f:facet name="output">
-							<h:outputText
-								value="#{usuario.areaFuncional.gerencia.gerenciaCentral.descripcion}" />
-							</f:facet>
-							
-							<f:facet name="input">
-									<p:selectOneMenu id="cboGeCen" value="#{usuarioBean.idGerenciaCentral}" style="width:100%">
-										<f:selectItems value="#{usuarioBean.listaGerenciaCentral}" var="gerCe" itemLabel="#{gerCe.descripcion}" itemValue="#{gerCe.id}" />
+						<p:column headerText="Gerencia Central">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText
+										value="#{usuario.areaFuncional.gerencia.gerenciaCentral.descripcion}" />
+								</f:facet>
 
-								<f:ajax event="change" listener="#{usuarioBean.listarGerencia()}"
-								execute="cboGeCen" render="cboGerencia" />
+								<f:facet name="input">
+									<p:selectOneMenu id="cboGeCentral"
+										value="#{usuarioBean.idGerenciaCentral}" style="width:100%">
+										<f:selectItems value="#{usuarioBean.listaGerenciaCentral}"
+											var="gerCe" itemLabel="#{gerCe.descripcion}"
+											itemValue="#{gerCe.id}" />
+
+										<f:ajax event="change"
+											listener="#{usuarioBean.listarGerencia()}"
+											execute="cboGeCentral" render="cboGerencia" />
 									</p:selectOneMenu>
 								</f:facet>
-						</p:cellEditor>
+							</p:cellEditor>
 						</p:column>
-						
-		<!--  	<p:outputLabel value="Gerencia" for="cboGerencia"/>
-						<p:selectOneMenu id="cboGerencia"
-							value="#{usuarioBean.idGerencia}">
-							
-							<f:selectItem itemLabel="[Seleccione]" itemValue=" " 
-								noSelectionOption="true" />
-								
-							<f:selectItems value="#{usuarioBean.listaGerencia}" var="reg"
-								itemLabel="#{reg.descripcion}" itemValue="#{reg.id}" />
-								
-							<f:ajax event="change" listener="#{usuarioBean.listarAreaFunc()}"
-								execute="cboGeCen" render="cboArea" ></f:ajax>	
 
-						</p:selectOneMenu>
-						<p:message for="cboGerencia"></p:message>
 
-						<p:outputLabel value="Area Funcional" for="cboArea"/>
-						<p:selectOneMenu id="cboArea"
-							value="#{usuarioBean.idAreaFunc}"
-							required="true" requiredMessage="Completar gerencia central">
-
-							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
-							<f:selectItems value="#{usuarioBean.listaAreaFuncional}"
-								var="fila" itemLabel="#{fila.descripcion}"
-								itemValue="#{fila.id}" />
-						</p:selectOneMenu>
-						<p:message for="cboArea"></p:message> -->	
-
-						<p:column headerText="Gerencia" width="60">
-						<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText
-								value="#{usuario.areaFuncional.gerencia.descripcion}" />
+						<p:column headerText="Gerencia">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText
+										value="#{usuario.areaFuncional.gerencia.descripcion}" />
 								</f:facet>
-							<f:facet name="input">
-									<p:selectOneMenu id="cboGerencia" value="#{usuarioBean.idGerencia}" style="width:100%">
-										<f:selectItems value="#{usuarioBean.listaGerencia}" var="ger" itemLabel="#{ger.descripcion}" itemValue="#{ger.id}"/>
-							<f:ajax event="change" listener="#{usuarioBean.listarAreaFunc()}" execute="cboGerencia" render="cboArea"></f:ajax>
-									</p:selectOneMenu>
-								</f:facet>	
-						</p:cellEditor>
-						</p:column>
-	
-
-						<p:column headerText="Area Funcional" width="60">
-						<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{usuario.areaFuncional.descripcion}" />
-						</f:facet>
-						
-						<f:facet name="input">	
-									<p:selectOneMenu id="cboArea" value="#{usuarioBean.idAreaFunc}" style="width:100%">
-										<f:selectItems value="#{usuarioBean.listaAreaFuncional}" var="fila" itemLabel="#{fila.descripcion}" itemValue="#{fila.id}" />
-									</p:selectOneMenu>
-								</f:facet>	
-						</p:cellEditor>
-						</p:column>
-
-						<p:column headerText="Perfil" width="60">
-						<p:cellEditor>
-						<f:facet name="output">
-							<h:outputLabel value="#{usuario.perfil.descripcion}" />
-							</f:facet>
-							<f:facet name="input">
-									<p:selectOneMenu value="#{usuarioBean.idPerfil}" style="width:100%">
-										<f:selectItems value="#{usuarioBean.listaPerfiles}" var="per" itemLabel="#{per.descripcion}" itemValue="#{per.id}" />
-
+								<f:facet name="input">
+									<p:selectOneMenu id="cboGerencia"
+										value="#{usuarioBean.idGerencia}" style="width:100%">
+										<f:selectItems value="#{usuarioBean.listaGerencia}" var="ger"
+											itemLabel="#{ger.descripcion}" itemValue="#{ger.id}" />
+										<f:ajax event="change"
+											listener="#{usuarioBean.listarAreaFunc()}"
+											execute="cboGerencia" render="cboAreaFun"></f:ajax>
 									</p:selectOneMenu>
 								</f:facet>
-						</p:cellEditor>
+							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Puesto" width="60">
-						<p:cellEditor>
-						<f:facet name="output">
-							<h:outputLabel value="#{usuario.puesto.descripcion}" />
-							</f:facet>
-							
-									<f:facet name="input">
-									<p:selectOneMenu value="#{usuarioBean.idPuesto}" style="width:100%">
-										<f:selectItems value="#{usuarioBean.listaPuestos}" var="pu" itemLabel="#{pu.descripcion}" itemValue="#{pu.id}" />
+
+						<p:column headerText="Area Funcional">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{usuario.areaFuncional.descripcion}" />
+								</f:facet>
+
+								<f:facet name="input">
+									<p:selectOneMenu id="cboAreaFun"
+										value="#{usuarioBean.idAreaFunc}" style="width:100%">
+										<f:selectItems value="#{usuarioBean.listaAreaFuncional}"
+											var="fil" itemLabel="#{fil.descripcion}"
+											itemValue="#{fil.id}" />
 
 									</p:selectOneMenu>
 								</f:facet>
 							</p:cellEditor>
 						</p:column>
 
-						<p:column headerText="Estado" width="60">
+						<p:column headerText="Perfil">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputLabel value="#{usuario.perfil.descripcion}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:selectOneMenu value="#{usuarioBean.idPerfil}"
+										style="width:100%">
+										<f:selectItems value="#{usuarioBean.listaPerfiles}" var="per"
+											itemLabel="#{per.descripcion}" itemValue="#{per.id}" />
+
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Puesto">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputLabel value="#{usuario.puesto.descripcion}" />
+								</f:facet>
+
+								<f:facet name="input">
+									<p:selectOneMenu value="#{usuarioBean.idPuesto}"
+										style="width:100%">
+										<f:selectItems value="#{usuarioBean.listaPuestos}" var="pu"
+											itemLabel="#{pu.descripcion}" itemValue="#{pu.id}" />
+
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="Estado">
 							<p:cellEditor>
 								<f:facet name="output">
 									<h:outputText
@@ -215,17 +201,13 @@
 						</p:column>
 
 
-						<p:column style="width:40px">
-							<f:facet name="header">Acciones</f:facet>
-							<p:rowEditor />
-
+						<p:column headerText="Acciones">
+							<p:commandButton value="Edit" icon="fa fa-fw fa-edit"
+								action="#{usuarioBean.buscar()}"
+								oncomplete="PF('wActualizar').show()" update=":idActualizar" />
 						</p:column>
 
-
 					</p:dataTable>
-
-
-
 
 				</h:panelGrid>
 
@@ -239,8 +221,10 @@
 
 		<p:dialog closeOnEscape="true" widgetVar="usuario_create"
 			showEffect="clip" hideEffect="drop" width="800"
-			footer="Crear Usuario">
+			footer="Crear Usuario" resizable="false" draggable="false">
 			<h:form id="crearUsuario">
+
+				<p:growl id="msgs" showDetail="true"></p:growl>
 
 				<h:inputHidden value="#{usuarioBean.usuarioSeleccionado.id}" />
 
@@ -277,7 +261,7 @@
 						<p:message for="text_cor" />
 
 
-						<p:outputLabel value="Gerencia Central" for="cboGeCen"/>
+						<p:outputLabel value="Gerencia Central" for="cboGeCen" />
 						<p:selectOneMenu id="cboGeCen"
 							value="#{usuarioBean.idGerenciaCentral}">
 							<f:selectItem itemLabel="[Seleccione]" itemValue=" "
@@ -291,26 +275,25 @@
 						</p:selectOneMenu>
 						<p:message for="cboGeCen"></p:message>
 
-						<p:outputLabel value="Gerencia" for="cboGerencia"/>
+						<p:outputLabel value="Gerencia" for="cboGerencia" />
 						<p:selectOneMenu id="cboGerencia"
 							value="#{usuarioBean.idGerencia}">
-							
-							<f:selectItem itemLabel="[Seleccione]" itemValue=" " 
+
+							<f:selectItem itemLabel="[Seleccione]" itemValue=" "
 								noSelectionOption="true" />
-								
+
 							<f:selectItems value="#{usuarioBean.listaGerencia}" var="reg"
 								itemLabel="#{reg.descripcion}" itemValue="#{reg.id}" />
-								
+
 							<f:ajax event="change" listener="#{usuarioBean.listarAreaFunc()}"
-								execute="cboGeCen" render="cboArea" ></f:ajax>	
+								execute="cboGerencia" render="cboArea"></f:ajax>
 
 						</p:selectOneMenu>
 						<p:message for="cboGerencia"></p:message>
 
-						<p:outputLabel value="Area Funcional" for="cboArea"/>
-						<p:selectOneMenu id="cboArea"
-							value="#{usuarioBean.idAreaFunc}"
-							required="true" requiredMessage="Completar gerencia central">
+						<p:outputLabel value="Area Funcional" for="cboArea" />
+						<p:selectOneMenu id="cboArea" value="#{usuarioBean.idAreaFunc}"
+							required="true" Label="Completar gerencia central">
 
 							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
 							<f:selectItems value="#{usuarioBean.listaAreaFuncional}"
@@ -319,51 +302,172 @@
 						</p:selectOneMenu>
 						<p:message for="cboArea"></p:message>
 
-				
-				<p:outputLabel value="Perfil" for="cboAPerfil"/>
-						<p:selectOneMenu id="cboAPerfil"
-							value="#{usuarioBean.idPerfil}"
+
+						<p:outputLabel value="Perfil" for="cboAPerfil" />
+						<p:selectOneMenu id="cboAPerfil" value="#{usuarioBean.idPerfil}"
 							required="true" requiredMessage="Completar Perfil">
 
 							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
-							<f:selectItems value="#{usuarioBean.listaPerfiles}"
-								var="fila" itemLabel="#{fila.descripcion}"
-								itemValue="#{fila.id}" />
+							<f:selectItems value="#{usuarioBean.listaPerfiles}" var="fila"
+								itemLabel="#{fila.descripcion}" itemValue="#{fila.id}" />
 						</p:selectOneMenu>
-				<p:message for="cboAPerfil"/>
-				
-				<p:outputLabel value="Puesto" for="cboAPuesto"/>
-						<p:selectOneMenu id="cboAPuesto"
-							value="#{usuarioBean.idPuesto}"
+						<p:message for="cboAPerfil" />
+
+						<p:outputLabel value="Puesto" for="cboAPuesto" />
+						<p:selectOneMenu id="cboAPuesto" value="#{usuarioBean.idPuesto}"
 							required="true" requiredMessage="Completar Puesto">
 
 							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
-							<f:selectItems value="#{usuarioBean.listaPuestos}"
-								var="fila" itemLabel="#{fila.descripcion}"
-								itemValue="#{fila.id}" />
+							<f:selectItems value="#{usuarioBean.listaPuestos}" var="fila"
+								itemLabel="#{fila.descripcion}" itemValue="#{fila.id}" />
 						</p:selectOneMenu>
-				<p:message for="cboAPuesto"/>
-				
-				<p:outputLabel value="Estado"></p:outputLabel>
-				<p:selectOneMenu id="tipoEstado" value="#{usuarioBean.usuarioSeleccionado.estado}">
-					<f:selectItem itemLabel="Habilitado" itemValue="1"/>
-					<f:selectItem itemLabel="Deshabilitado" itemValue="0"/>
-				</p:selectOneMenu>
-				
-				
-				<p:commandButton value="Registrar" actionListener="#{usuarioBean.registrar()}" 
-								oncomplete="if(!args.validationFailed) PF('usuario_create').hide()"	
-								
-								update=":listaUsuarios:usuariodt" inmediate="true">
-				</p:commandButton>
-				
-				
-			 
+						<p:message for="cboAPuesto" />
+
+						<p:outputLabel value="Estado"></p:outputLabel>
+						<p:selectOneMenu id="tipoEstado"
+							value="#{usuarioBean.usuarioSeleccionado.estado}">
+							<f:selectItem itemLabel="Habilitado" itemValue="1" />
+							<f:selectItem itemLabel="Deshabilitado" itemValue="0" />
+						</p:selectOneMenu>
+
+
+						<p:commandButton value="Registrar"
+							actionListener="#{usuarioBean.registrar()}"
+							oncomplete="if(!args.validationFailed) PF('usuario_create').hide()"
+							update="#{usuarioBean.listarTodo()}" inmediate="true">
+						</p:commandButton>
+
+
+
 					</h:panelGrid>
 				</p:fieldset>
 			</h:form>
 		</p:dialog>
 
+		<p:dialog header="Actualizar Usuario" widgetVar="wActualizar"
+			id="idActualizar">
+
+			<h:form id="idEdita">
+				<!-- mostrar mensajes de validación -->
+				<p:growl showDetail="true" />
+
+
+
+				<p:fieldset legend="Editar Usuario">
+					<p:panelGrid columns="3">
+
+						<p:outputLabel value="Codigo" for="text_cod" />
+						<p:inputText id="text_cod"
+							value="#{usuarioBean.usuarioSeleccionado.codigo}"
+							style="width: 200px;" required="true"
+							requiredMessage="Completar Codigo" />
+						<p:message for="text_cod" />
+
+						<p:outputLabel value="Nombre" for="text_nom" />
+						<p:inputText id="text_nom"
+							value="#{usuarioBean.usuarioSeleccionado.nombre}"
+							style="width: 200px;" required="true"
+							requiredMessage="Completar Nombre" />
+						<p:message for="text_nom" />
+
+						<p:outputLabel value="Clave" for="text_cla" />
+						<p:inputText id="text_cla"
+							value="#{usuarioBean.usuarioSeleccionado.clave}"
+							style="width: 200px;" required="true"
+							requiredMessage="Completar Clave" />
+						<p:message for="text_cla" />
+
+						<p:outputLabel value="Correo" for="text_cor" />
+						<p:inputText id="text_cor"
+							value="#{usuarioBean.usuarioSeleccionado.correo}"
+							style="width: 200px;" required="true"
+							requiredMessage="Completar Correo" />
+						<p:message for="text_cor" />
+
+
+						<p:outputLabel value="Gerencia Central" for="cboGeCen" />
+						<p:selectOneMenu id="cboGeCen"
+							value="#{usuarioBean.idGerenciaCentral}">
+							<f:selectItem itemLabel="[Seleccione]" itemValue=" "
+								noSelectionOption="true" />
+							<f:selectItems value="#{usuarioBean.listaGerenciaCentral}"
+								var="gece" itemLabel="#{gece.descripcion}"
+								itemValue="#{gece.id}" />
+							<f:ajax event="change" listener="#{usuarioBean.listarGerencia()}"
+								execute="cboGeCen" render="cboGerencia" />
+
+						</p:selectOneMenu>
+						<p:message for="cboGeCen"></p:message>
+
+						<p:outputLabel value="Gerencia" for="cboGerencia" />
+						<p:selectOneMenu id="cboGerencia"
+							value="#{usuarioBean.idGerencia}">
+
+							<f:selectItem itemLabel="[Seleccione]" itemValue=" "
+								noSelectionOption="true" />
+
+							<f:selectItems value="#{usuarioBean.listaGerencia}" var="reg"
+								itemLabel="#{reg.descripcion}" itemValue="#{reg.id}" />
+
+							<f:ajax event="change" listener="#{usuarioBean.listarAreaFunc()}"
+								execute="cboGerencia" render="cboArea"></f:ajax>
+
+						</p:selectOneMenu>
+						<p:message for="cboGerencia"></p:message>
+
+						<p:outputLabel value="Area Funcional" for="cboArea" />
+						<p:selectOneMenu id="cboArea" value="#{usuarioBean.idAreaFunc}"
+							required="true" Label="Completar gerencia central">
+
+							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+							<f:selectItems value="#{usuarioBean.listaAreaFuncional}"
+								var="fila" itemLabel="#{fila.descripcion}"
+								itemValue="#{fila.id}" />
+						</p:selectOneMenu>
+						<p:message for="cboArea"></p:message>
+
+
+						<p:outputLabel value="Perfil" for="cboAPerfil" />
+						<p:selectOneMenu id="cboAPerfil" value="#{usuarioBean.idPerfil}"
+							required="true" requiredMessage="Completar Perfil">
+
+							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+							<f:selectItems value="#{usuarioBean.listaPerfiles}" var="fila"
+								itemLabel="#{fila.descripcion}" itemValue="#{fila.id}" />
+						</p:selectOneMenu>
+						<p:message for="cboAPerfil" />
+
+						<p:outputLabel value="Puesto" for="cboAPuesto" />
+						<p:selectOneMenu id="cboAPuesto" value="#{usuarioBean.idPuesto}"
+							required="true" requiredMessage="Completar Puesto">
+
+							<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+							<f:selectItems value="#{usuarioBean.listaPuestos}" var="fila"
+								itemLabel="#{fila.descripcion}" itemValue="#{fila.id}" />
+						</p:selectOneMenu>
+						<p:message for="cboAPuesto" />
+
+						<p:outputLabel value="Estado"></p:outputLabel>
+						<p:selectOneMenu id="tipoEstado"
+							value="#{usuarioBean.usuarioSeleccionado.estado}">
+							<f:selectItem itemLabel="Habilitado" itemValue="1" />
+							<f:selectItem itemLabel="Deshabilitado" itemValue="0" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<h:panelGroup style="display:block; text-align:center">
+								<p:commandButton async="false" value="Grabar"
+									action="#{usuarioBean.modificar()}"
+									oncomplete="if(!args.validationFailed) PF('wActualizar').hide()"
+									update="#{usuarioBean.listarTodo()}" />
+							</h:panelGroup>
+						</f:facet>
+
+
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</p:dialog>
 
 	</ui:define>
 </ui:composition>
